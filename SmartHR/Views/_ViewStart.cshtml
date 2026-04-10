@@ -1,0 +1,22 @@
+@using SmartHR.Models
+@{
+    // Read the user role to decide the layout structure dynamically.
+    bool isAdmin = User.IsInRole(AppRoles.SuperAdmin) || 
+                   User.IsInRole(AppRoles.Admin) || 
+                   User.IsInRole(AppRoles.IT) || 
+                   User.IsInRole(AppRoles.Manager) || 
+                   User.IsInRole(AppRoles.HR);
+
+    if (isAdmin)
+    {
+        Layout = "_AdminLayout";
+    }
+    else if (User.Identity != null && User.Identity.IsAuthenticated)
+    {
+        Layout = "_EmployeeLayout";
+    }
+    else
+    {
+        Layout = "_LoginLayout";
+    }
+}

@@ -1,0 +1,63 @@
+﻿@model IEnumerable<SmartHR.Models.Attendance>
+
+@{
+    ViewData["Title"] = "تقرير الحضور والانصراف";
+}
+
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-file-invoice text-info me-2"></i> تقرير الحضور الشهري</h1>
+    <button class="btn btn-outline-info" onclick="window.print()">
+        <i class="fas fa-print me-1"></i> طباعة التقرير
+    </button>
+</div>
+
+<div class="card shadow-sm border-0 bg-light mb-4 d-print-none">
+    <div class="card-body">
+        <form method="get" asp-action="Report" class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label fw-bold">من تاريخ</label>
+                <input type="date" name="startDate" class="form-control" value="@ViewBag.StartDate" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-bold">إلى تاريخ</label>
+                <input type="date" name="endDate" class="form-control" value="@ViewBag.EndDate" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-bold">الموظف</label>
+                <select name="employeeId" class="form-select" asp-items="ViewBag.EmployeeId">
+                    <option value="">-- جميع الموظفين --</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-info text-white w-100"><i class="fas fa-search me-1"></i> بحث</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="alert alert-success border-0 shadow-sm text-center py-3 mb-0">
+            <h5 class="fw-bold mb-1">@Model.Count(a => a.Status == "Present")</h5>
+            <small>أيام الحضور</small>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="alert alert-warning border-0 shadow-sm text-center py-3 mb-0">
+            <h5 class="fw-bold mb-1">@Model.Count(a => a.Status == "Late")</h5>
+            <small>مرات التأخير</small>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="alert alert-danger border-0 shadow-sm text-center py-3 mb-0">
+            <h5 class="fw-bold mb-1">@Model.Count(a => a.Status == "Absent")</h5>
+            <small>أيام الغياب</small>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+        <partial name="_AttendanceTable" model="Model" />
+    </div>
+</div>

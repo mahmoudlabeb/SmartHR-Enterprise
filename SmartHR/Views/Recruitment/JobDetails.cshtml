@@ -1,0 +1,61 @@
+﻿@model SmartHR.Models.JobPosting
+
+@{
+    ViewData["Title"] = "تفاصيل الوظيفة";
+}
+
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-laptop-house text-info me-2"></i> إدارة: @Model.Title</h1>
+    <div>
+        <a asp-action="EditJob" asp-route-id="@Model.Id" class="btn btn-primary shadow-sm"><i class="fas fa-edit me-1"></i> تعديل الوظيفة</a>
+        <a asp-action="Index" class="btn btn-outline-secondary shadow-sm"><i class="fas fa-list me-1"></i> الوظائف</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8 mb-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+                    <div>
+                        <h4 class="fw-bold mb-1">@Model.Title</h4>
+                        <span class="text-muted"><i class="fas fa-building me-1"></i> @Model.Department | <i class="fas fa-map-marker-alt ms-2 me-1"></i> @Model.Location</span>
+                    </div>
+                    <span class="badge @(Model.Status == "Open" ? "bg-success" : "bg-danger") px-3 py-2 fs-6">
+                        @(Model.Status == "Open" ? "متاحة للتقديم" : "مغلقة")
+                    </span>
+                </div>
+
+                <h6 class="fw-bold text-primary mb-2">وصف الوظيفة:</h6>
+                <p class="text-muted" style="white-space: pre-wrap;">@Model.Description</p>
+
+                <h6 class="fw-bold text-primary mb-2 mt-4">المتطلبات والشروط:</h6>
+                <div class="bg-light p-3 rounded text-dark" style="white-space: pre-wrap;">@Model.Requirements</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm border-0 h-100 bg-light">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                <h6 class="m-0 fw-bold text-dark"><i class="fas fa-users text-info me-2"></i> المتقدمين (<span class="text-primary">@(Model.Candidates?.Count ?? 0)</span>)</h6>
+            </div>
+            <div class="card-body p-2" style="max-height: 600px; overflow-y: auto;">
+                @if (Model.Candidates == null || !Model.Candidates.Any())
+                {
+                    <div class="text-center py-5 text-muted">
+                        <i class="far fa-folder-open fa-2x mb-2 opacity-50"></i>
+                        <p class="small mb-0">لا يوجد متقدمين حتى الآن.</p>
+                    </div>
+                }
+                else
+                {
+                    @foreach (var candidate in Model.Candidates.OrderByDescending(c => c.AppliedAt))
+                    {
+                        <partial name="_CandidateCard" model="candidate" />
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>

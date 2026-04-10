@@ -1,0 +1,74 @@
+@model SmartHR.Models.TaskItem
+
+@{
+    ViewData["Title"] = "إسناد مهمة جديدة";
+}
+
+<div class="pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-plus-circle text-primary me-2"></i> إسناد مهمة جديدة</h1>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0 border-top border-primary border-4">
+            <div class="card-body p-4">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Title" class="form-label fw-bold">عنوان المهمة <span class="text-danger">*</span></label>
+                        <input asp-for="Title" class="form-control form-control-lg" placeholder="ما الذي يجب إنجازه؟" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label fw-bold">التفاصيل والوصف</label>
+                        <textarea asp-for="Description" class="form-control" rows="4" placeholder="اكتب تفاصيل المهمة والروابط المطلوبة هنا..."></textarea>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="ProjectId" class="form-label fw-bold">المشروع التابع له</label>
+                            <select asp-for="ProjectId" class="form-select" asp-items="ViewBag.ProjectsList">
+                                <option value="">-- مهمة عامة (بدون مشروع) --</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="AssignedToId" class="form-label fw-bold">إسناد إلى الموظف <span class="text-danger">*</span></label>
+                            <select asp-for="AssignedToId" class="form-select" asp-items="ViewBag.EmployeesList" required>
+                                <option value="">-- اختر الموظف --</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row bg-light p-3 rounded mb-4">
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <label asp-for="Priority" class="form-label fw-bold">الأولوية</label>
+                            <select asp-for="Priority" class="form-select border-warning">
+                                <option value="Low">عادية</option>
+                                <option value="Medium" selected>متوسطة</option>
+                                <option value="High">عاجلة</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <label asp-for="Status" class="form-label fw-bold">الحالة</label>
+                            <select asp-for="Status" class="form-select">
+                                <option value="Pending" selected>قيد الانتظار</option>
+                                <option value="InProgress">قيد التنفيذ</option>
+                                <option value="Completed">مكتملة</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="DueDate" class="form-label fw-bold">تاريخ التسليم</label>
+                            <input asp-for="DueDate" type="date" class="form-control border-danger" value="@DateTime.Today.AddDays(3).ToString("yyyy-MM-dd")" required />
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <a asp-action="TaskAssignment" class="btn btn-light border"><i class="fas fa-times me-1"></i> إلغاء</a>
+                        <button type="submit" class="btn btn-primary px-5"><i class="fas fa-paper-plane me-2"></i> إرسال المهمة</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

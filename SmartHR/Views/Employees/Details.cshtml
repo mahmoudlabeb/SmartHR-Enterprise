@@ -1,0 +1,78 @@
+@model SmartHR.Models.Employee
+@{
+    ViewData["Title"] = "تفاصيل الموظف";
+}
+
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2 fw-bold mb-0"><i class="fas fa-address-card me-2" style="color:var(--info)"></i> الملف التعريفي</h1>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning shadow-sm me-2"><i class="fas fa-edit me-1"></i> تعديل</a>
+        <a asp-action="Index" class="btn btn-outline-light border"><i class="fas fa-arrow-right me-1"></i> رجوع لقائمة الموظفين</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow-lg h-100">
+            <div class="card-body text-center p-5">
+                <div class="avatar-circle mx-auto mb-3" style="width:100px; height:100px; font-size:2.5rem; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));">
+                    @(Model?.FullName?.Length > 0 ? Model.FullName[0].ToString() : "?")
+                </div>
+                <h4 class="fw-bold mb-1">@Model?.FullName</h4>
+                <p class="text-muted mb-3">@Model?.Designation?.Title</p>
+                
+                @if (Model != null && Model.IsActive)
+                {
+                    <span class="badge bg-success rounded-pill px-3 py-2"><i class="fas fa-check-circle me-1"></i> موظف نشط</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger rounded-pill px-3 py-2"><i class="fas fa-times-circle me-1"></i> حساب موقوف</span>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow-lg h-100">
+            <div class="card-header bg-transparent border-bottom-0 pt-4 pb-0">
+                <h5 class="fw-bold" style="color: var(--accent-primary)"><i class="fas fa-info-circle me-2"></i> المعلومات الأساسية</h5>
+            </div>
+            <div class="card-body p-4">
+                <div class="row border-bottom border-secondary border-opacity-25 pb-3 mb-3">
+                    <div class="col-sm-4 text-muted fw-bold">البريد الإلكتروني</div>
+                    <div class="col-sm-8" dir="ltr" style="text-align: right;">@Model?.Email</div>
+                </div>
+                <div class="row border-bottom border-secondary border-opacity-25 pb-3 mb-3">
+                    <div class="col-sm-4 text-muted fw-bold">رقم الهاتف</div>
+                    <div class="col-sm-8" dir="ltr" style="text-align: right;">@(Model?.PhoneNumber ?? "غير مسجل")</div>
+                </div>
+                <div class="row border-bottom border-secondary border-opacity-25 pb-3 mb-3">
+                    <div class="col-sm-4 text-muted fw-bold">القسم</div>
+                    <div class="col-sm-8">@(Model?.Department?.Name ?? "غير مسجل")</div>
+                </div>
+                <div class="row border-bottom border-secondary border-opacity-25 pb-3 mb-3">
+                    <div class="col-sm-4 text-muted fw-bold">تاريخ التعيين</div>
+                    <div class="col-sm-8">@Model?.HireDate.ToString("yyyy/MM/dd")</div>
+                </div>
+                <div class="row pb-3">
+                    <div class="col-sm-4 text-muted fw-bold">تاريخ الإضافة للنظام</div>
+                    <div class="col-sm-8">@Model?.CreatedAt.ToString("yyyy/MM/dd hh:mm tt")</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model != null)
+{
+    <partial name="_EmployeeDocuments" model="Model.Id" />
+}
+
+<style>
+    .avatar-circle {
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 700; color: #fff;
+    }
+</style>

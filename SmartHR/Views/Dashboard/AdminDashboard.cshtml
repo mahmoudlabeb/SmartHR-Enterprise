@@ -1,0 +1,220 @@
+@using SmartHR.ViewModels
+@model DashboardViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+@{
+    ViewData["Title"] = Localizer["DashboardTitle"];
+}
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-4 border-bottom border-secondary border-opacity-25">
+    <div>
+        <h1 class="h2 fw-bold"><i class="fas fa-chart-pie text-primary me-2"></i> @Localizer["DashboardTitle"]</h1>
+        <p class="text-muted">@Localizer["WelcomeBack"]</p>
+    </div>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <button type="button" class="btn btn-sm btn-primary shadow-sm px-3">
+            <i class="fas fa-download me-1"></i> @Localizer["ExportReport"]
+        </button>
+    </div>
+</div>
+
+<!-- Global Stats -->
+<div class="row mb-4 g-4">
+    <div class="col-xl-3 col-md-6">
+        <div class="card h-100 py-2 shadow-lg border-0 bg-dark hover-elevate" style="border-left: 4px solid #6366f1 !important;">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col me-2">
+                        <div class="small fw-bold text-uppercase mb-1" style="color: #6366f1; letter-spacing: 1px;">@Localizer["TotalEmployees"]</div>
+                        <div class="h3 mb-0 fw-bold text-white">@Model.TotalEmployees</div>
+                    </div>
+                    <div class="col-auto"><i class="fas fa-users fa-2x text-white-50"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+        <div class="card h-100 py-2 shadow-lg border-0 bg-dark hover-elevate" style="border-left: 4px solid #10b981 !important;">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col me-2">
+                        <div class="small fw-bold text-uppercase mb-1" style="color: #10b981; letter-spacing: 1px;">@Localizer["TotalDepartments"]</div>
+                        <div class="h3 mb-0 fw-bold text-white">@Model.TotalDepartments</div>
+                    </div>
+                    <div class="col-auto"><i class="fas fa-building fa-2x text-white-50"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+        <div class="card h-100 py-2 shadow-lg border-0 bg-dark hover-elevate" style="border-left: 4px solid #0ea5e9 !important;">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col me-2">
+                        <div class="small fw-bold text-uppercase mb-1" style="color: #0ea5e9; letter-spacing: 1px;">@Localizer["ActiveProjects"]</div>
+                        <div class="h3 mb-0 fw-bold text-white">@Model.ActiveProjects</div>
+                    </div>
+                    <div class="col-auto"><i class="fas fa-project-diagram fa-2x text-white-50"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+        <div class="card h-100 py-2 shadow-lg border-0 bg-dark hover-elevate" style="border-left: 4px solid #f43f5e !important;">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col me-2">
+                        <div class="small fw-bold text-uppercase mb-1" style="color: #f43f5e; letter-spacing: 1px;">@Localizer["OpenTickets"]</div>
+                        <div class="h3 mb-0 fw-bold text-white">@Model.OpenTickets</div>
+                    </div>
+                    <div class="col-auto"><i class="fas fa-exclamation-circle fa-2x text-white-50"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-lg-8">
+        <div class="card h-100 border-0 shadow-lg bg-dark overflow-hidden">
+            <div class="card-header bg-dark border-bottom border-light border-opacity-10 pt-4 pb-3">
+                <h6 class="m-0 fw-bold text-white"><i class="fas fa-chart-line me-2 text-primary"></i> @Localizer["AttendanceOverview"]</h6>
+            </div>
+            <div class="card-body p-4">
+                <canvas id="attendanceChart" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card h-100 border-0 shadow-lg bg-dark">
+            <div class="card-header bg-dark border-bottom border-light border-opacity-10 pt-4 pb-3">
+                <h6 class="m-0 fw-bold text-white"><i class="fas fa-money-bill-wave me-2 text-success"></i> @Localizer["FinancialQuickView"]</h6>
+            </div>
+            <div class="card-body d-flex flex-column align-items-center justify-content-center p-4">
+                <div style="height: 180px; width: 180px;">
+                    <canvas id="summaryChart"></canvas>
+                </div>
+                <div class="text-center mt-4 w-100">
+                    <p class="mb-1 text-muted small uppercase fw-bold">@Localizer["TotalSalariesPaid"]</p>
+                    <h3 class="fw-bold text-success mb-0">@Model.TotalSalariesPaid.ToString("C")</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-12">
+        <div class="card border-0 shadow-lg bg-dark">
+            <div class="card-header bg-dark border-bottom border-light border-opacity-10 pt-4 pb-3">
+                <h6 class="m-0 fw-bold text-white"><i class="fas fa-bell me-2 text-warning"></i> @Localizer["AlertCenter"]</h6>
+            </div>
+            <div class="card-body p-4">
+                <div class="row g-4">
+                    @if (Model.PendingLeaves > 0)
+                    {
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center p-3 bg-opacity-10 bg-success rounded-3 border border-success border-opacity-25">
+                                <div class="bg-success rounded-circle p-3 me-3 text-white shadow">
+                                    <i class="fas fa-calendar-check fa-lg"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 fw-bold text-white">إجازات للتقييم</h6>
+                                    <p class="mb-0 text-muted small">يوجد @Model.PendingLeaves طلبات إجازة بانتظار الموافقة.</p>
+                                </div>
+                                <a href="/Leaves" class="btn btn-sm btn-outline-success ms-auto">مراجعة</a>
+                            </div>
+                        </div>
+                    }
+
+                    @if (Model.OpenTickets > 0)
+                    {
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center p-3 bg-opacity-10 bg-danger rounded-3 border border-danger border-opacity-25">
+                                <div class="bg-danger rounded-circle p-3 me-3 text-white shadow">
+                                    <i class="fas fa-headset fa-lg"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 fw-bold text-white">تذاكر دعم فني</h6>
+                                    <p class="mb-0 text-muted small">يوجد @Model.OpenTickets تذاكر تحتاج للتدخل العاجل.</p>
+                                </div>
+                                <a href="/Tickets" class="btn btn-sm btn-outline-danger ms-auto">استجابة</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .hover-elevate { transition: transform 0.2s, box-shadow 0.2s; }
+    .hover-elevate:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.5) !important; }
+    .bg-dark { background-color: #1a1d21 !important; }
+    canvas { filter: drop-shadow(0 0 5px rgba(99, 102, 241, 0.2)); }
+</style>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Chart.defaults.color = '#94a3b8';
+            Chart.defaults.font.family = "'Inter', 'system-ui', sans-serif";
+
+            var ctx = document.getElementById('attendanceChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+                    datasets: [{
+                        label: 'الحضور %',
+                        data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.AttendanceWeeklyData)),
+                        backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                        borderColor: '#6366f1',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#6366f1',
+                        pointBorderColor: '#fff',
+                        pointHoverRadius: 6,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true, max: 100 },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+
+            var summaryCtx = document.getElementById('summaryChart').getContext('2d');
+            new Chart(summaryCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['المقبولة', 'المعلقة'],
+                    datasets: [{
+                        data: [@Model.TotalLeavesApproved, @Model.PendingLeaves],
+                        backgroundColor: ['#10b981', '#f59e0b'],
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    cutout: '75%',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } }
+                }
+            });
+        });
+    </script>
+}

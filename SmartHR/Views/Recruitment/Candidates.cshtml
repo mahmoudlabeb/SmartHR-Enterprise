@@ -1,0 +1,68 @@
+﻿@model IEnumerable<SmartHR.Models.Candidate>
+
+@{
+    ViewData["Title"] = "قاعدة بيانات المتقدمين";
+}
+
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-users-cog text-primary me-2"></i> قاعدة بيانات المتقدمين (ATS)</h1>
+</div>
+
+<div class="card shadow-sm border-0 border-top border-primary border-4 mb-4">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4">اسم المتقدم</th>
+                        <th>الوظيفة المتقدم لها</th>
+                        <th>التواصل</th>
+                        <th class="text-center">تاريخ التقديم</th>
+                        <th class="text-center">الحالة</th>
+                        <th class="text-center">إجراء</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-4 fw-bold text-dark">
+                                <img src="https://ui-avatars.com/api/?name=@item.FullName&background=random&size=30" class="rounded-circle me-2" />
+                                @item.FullName
+                            </td>
+                            <td><span class="badge bg-secondary">@(item.JobPosting?.Title ?? "غير محدد")</span></td>
+                            <td>
+                                <div class="small"><i class="fas fa-envelope text-muted me-1"></i> @item.Email</div>
+                            </td>
+                            <td class="text-center text-muted small">@item.AppliedAt.ToString("dd MMM yyyy")</td>
+                            <td class="text-center">
+                                @if (item.Status == "Pending")
+                                {
+                                    <span class="badge bg-warning text-dark">قيد المراجعة</span>
+                                }
+                                else if (item.Status == "Interview")
+                                {
+
+                                    <span class="badge bg-primary">مقابلة</span>
+                                }
+                                else if (item.Status == "Hired")
+                                {
+
+                                    <span class="badge bg-success">تعيين</span>
+                                }
+                                else
+                                {
+
+                                    <span class="badge bg-danger">مرفوض</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                <a asp-action="CandidateDetails" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">مراجعة الملف</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,99 @@
+﻿@model SmartHR.Models.Salary
+
+@{
+    ViewData["Title"] = "إصدار راتب";
+}
+
+<div class="pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-file-invoice-dollar text-primary me-2"></i> إصدار مسير راتب</h1>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="card shadow-sm border-0 mb-4 border-top border-primary border-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3">بيانات الموظف والفترة</h5>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="EmployeeId" class="form-label fw-bold">الموظف <span class="text-danger">*</span></label>
+                            <select asp-for="EmployeeId" class="form-select" asp-items="ViewBag.EmployeeId" required></select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label asp-for="Month" class="form-label fw-bold">الشهر</label>
+                            <input asp-for="Month" type="number" min="1" max="12" class="form-control" value="@DateTime.Now.Month" />
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label asp-for="Year" class="form-label fw-bold">السنة</label>
+                            <input asp-for="Year" type="number" class="form-control" value="@DateTime.Now.Year" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card shadow-sm border-0 mb-4 border-top border-success border-4">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold text-success mb-3"><i class="fas fa-plus me-2"></i> المستحقات</h5>
+                            <div class="mb-3">
+                                <label asp-for="BasicSalary" class="form-label">الراتب الأساسي</label>
+                                <input asp-for="BasicSalary" type="number" step="0.01" class="form-control" required />
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="HousingAllowance" class="form-label">بدل السكن</label>
+                                <input asp-for="HousingAllowance" type="number" step="0.01" class="form-control" value="0" />
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="TransportAllowance" class="form-label">بدل المواصلات</label>
+                                <input asp-for="TransportAllowance" type="number" step="0.01" class="form-control" value="0" />
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="OtherAllowances" class="form-label">بدلات إضافية (مكافآت)</label>
+                                <input asp-for="OtherAllowances" type="number" step="0.01" class="form-control" value="0" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card shadow-sm border-0 mb-4 border-top border-danger border-4">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold text-danger mb-3"><i class="fas fa-minus me-2"></i> الاستقطاعات</h5>
+                            <div class="mb-3">
+                                <label asp-for="TaxDeduction" class="form-label">الضرائب / التأمينات</label>
+                                <input asp-for="TaxDeduction" type="number" step="0.01" class="form-control" value="0" />
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="AbsenceDeduction" class="form-label">خصومات (غياب/تأخير)</label>
+                                <input asp-for="AbsenceDeduction" type="number" step="0.01" class="form-control" value="0" />
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="OtherDeductions" class="form-label">استقطاعات أخرى (سلف)</label>
+                                <input asp-for="OtherDeductions" type="number" step="0.01" class="form-control" value="0" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0 mb-4 bg-light">
+                <div class="card-body d-flex justify-content-between align-items-center p-4">
+                    <div class="w-50 me-4">
+                        <label asp-for="Status" class="form-label fw-bold">حالة الدفع</label>
+                        <select asp-for="Status" class="form-select">
+                            <option value="Pending">معلق (لم يتم التحويل)</option>
+                            <option value="Paid">تم الدفع</option>
+                        </select>
+                    </div>
+                    <div>
+                        <a asp-action="Index" class="btn btn-outline-secondary me-2">إلغاء</a>
+                        <button type="submit" class="btn btn-primary px-5"><i class="fas fa-save me-2"></i> حفظ مسير الراتب</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

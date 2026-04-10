@@ -1,0 +1,53 @@
+﻿@model SmartHR.ViewModels.PermissionMatrixViewModel
+
+@{
+    ViewData["Title"] = "مصفوفة الصلاحيات الشاملة";
+}
+
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-th text-primary me-2"></i> مصفوفة الصلاحيات (Permission Matrix)</h1>
+    <a asp-controller="Roles" asp-action="Index" class="btn btn-outline-secondary shadow-sm">
+        <i class="fas fa-list me-1"></i> إدارة الأدوار
+    </a>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+        <i class="fas fa-check-double me-2"></i> @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-sm border-0 border-top border-primary border-4 mb-4">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="m-0 fw-bold text-dark"><i class="fas fa-sliders-h text-info me-2"></i> لوحة التحكم المركزية بالصلاحيات</h5>
+                    <p class="text-muted small mb-0 mt-1">قم بتفعيل أو تعطيل الوصول لوحدات النظام لكل دور بضغطة زر واحدة.</p>
+                </div>
+                <button class="btn btn-sm btn-light border"><i class="fas fa-filter me-1"></i> فلترة</button>
+            </div>
+            
+            <form asp-action="UpdateMatrix" method="post">
+                <div class="card-body p-0">
+                    <partial name="_PermissionMatrix" model="Model" />
+                </div>
+                
+                <div class="card-footer bg-light text-end py-3">
+                    <button type="reset" class="btn btn-secondary me-2"><i class="fas fa-undo me-1"></i> تراجع عن التعديلات</button>
+                    <button type="submit" class="btn btn-primary px-5 fw-bold shadow"><i class="fas fa-save me-2"></i> حفظ المصفوفة والتطبيق فوراً</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="alert alert-info shadow-sm border-0 border-start border-info border-4">
+    <h6 class="fw-bold"><i class="fas fa-lightbulb me-2 text-warning"></i> تلميح أمني:</h6>
+    <ul class="mb-0 small">
+        <li>دور <strong>SuperAdmin</strong> و <strong>Admin</strong> يمتلكان كافة الصلاحيات بشكل افتراضي ولا يمكن تعطيلها من هذه الشاشة لحماية النظام من الإغلاق العرضي.</li>
+        <li>أي تعديل يتم حفظه هنا سيتم تطبيقه فوراً على جميع المستخدمين المرتبطين بهذه الأدوار بمجرد تسجيل دخولهم القادم.</li>
+    </ul>
+</div>

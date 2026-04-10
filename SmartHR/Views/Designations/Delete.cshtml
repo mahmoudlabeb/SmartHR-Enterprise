@@ -1,0 +1,39 @@
+@model SmartHR.Models.Designation
+
+@{
+    ViewData["Title"] = "حذف المسمى الوظيفي";
+}
+
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2 text-danger"><i class="fas fa-trash-alt me-2"></i> حذف المسمى الوظيفي</h1>
+    <a asp-action="Index" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-right me-1"></i> العودة للقائمة
+    </a>
+</div>
+
+<div class="alert alert-warning shadow-sm border-start border-danger border-4" role="alert">
+    <h4 class="alert-heading"><i class="fas fa-exclamation-triangle me-2"></i> تحذير!</h4>
+    <p>هل أنت متأكد من رغبتك في حذف هذا المسمى الوظيفي؟ لا يمكن التراجع عن هذا الإجراء.</p>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-4 bg-light">
+        <dl class="row mb-0">
+            <dt class="col-sm-3 text-muted">المسمى الوظيفي</dt>
+            <dd class="col-sm-9 fw-bold fs-5 text-dark">@Html.DisplayFor(model => model.Title)</dd>
+
+            <dt class="col-sm-3 text-muted">القسم التابع له</dt>
+            <dd class="col-sm-9">
+                <span class="badge bg-secondary fs-6">@Html.DisplayFor(model => model.Department!.Name)</span>
+            </dd>
+        </dl>
+    </div>
+    <div class="card-footer bg-white text-end py-3">
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger btn-lg px-4 shadow-sm">
+                <i class="fas fa-trash me-2"></i> تأكيد الحذف
+            </button>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,97 @@
+﻿@model SmartHR.ViewModels.SalaryReportViewModel
+@{
+    ViewData["Title"] = "التقرير المالي للرواتب";
+}
+
+<style>
+    @@media print {
+        body {
+            background-color: #fff !important;
+        }
+
+        .d-print-none {
+            display: none !important;
+        }
+
+        .card {
+            border: none !important;
+        }
+    }
+</style>
+
+<div class="d-print-none d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-money-check-alt text-success me-2"></i> تقرير مسير الرواتب</h1>
+    <button onclick="window.print()" class="btn btn-secondary shadow-sm"><i class="fas fa-print me-1"></i> طباعة</button>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-8 d-print-none">
+        <div class="card shadow-sm border-0 bg-light h-100">
+            <div class="card-body">
+                <form method="get" class="row align-items-end">
+                    <div class="col-md-5">
+                        <label class="form-label fw-bold">الشهر</label>
+                        <input asp-for="Month" type="number" min="1" max="12" class="form-control" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">السنة</label>
+                        <input asp-for="Year" type="number" class="form-control" />
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-success w-100"><i class="fas fa-sync-alt me-1"></i> تحديث</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 bg-success text-white h-100 text-center justify-content-center">
+            <h5 class="mb-1">إجمالي الرواتب المطلوبة</h5>
+            <h2 class="fw-bold mb-0">@Model.TotalPayroll.ToString("N2") <small class="fs-6">ريال</small></h2>
+        </div>
+    </div>
+</div>
+
+<div class="d-none d-print-block text-center mb-4">
+    <h3 class="fw-bold">مسير رواتب شهر @Model.Month / @Model.Year</h3>
+    <p>إجمالي المدفوعات: <strong>@Model.TotalPayroll.ToString("N2")</strong></p>
+</div>
+
+<div class="table-responsive shadow-sm rounded border">
+    <table class="table table-bordered table-striped mb-0 text-center">
+        <thead class="table-dark">
+            <tr>
+                <th class="text-start ps-3">اسم الموظف</th>
+                <th>الأساسي</th>
+                <th>البدلات والمكافآت</th>
+                <th>الاستقطاعات</th>
+                <th class="bg-primary">الصافي المستحق</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Salaries.Any())
+            {
+                <tr><td colspan="5" class="py-4">لم يتم إصدار رواتب لهذا الشهر.</td></tr>
+            }
+            @foreach (var sal in Model.Salaries)
+            {
+                <tr>
+                    <td class="text-start ps-3 fw-bold">@sal.EmployeeName</td>
+                    <td>@sal.Basic.ToString("N2")</td>
+                    <td class="text-success">+ @sal.Allowances.ToString("N2")</td>
+                    <td class="text-danger">- @sal.Deductions.ToString("N2")</td>
+                    <td class="fw-bold text-primary">@sal.Net.ToString("N2")</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot class="table-light fw-bold">
+            <tr>
+                <td class="text-start ps-3">الإجماليات</td>
+                <td>@Model.Salaries.Sum(s => s.Basic).ToString("N2")</td>
+                <td class="text-success">@Model.Salaries.Sum(s => s.Allowances).ToString("N2")</td>
+                <td class="text-danger">@Model.Salaries.Sum(s => s.Deductions).ToString("N2")</td>
+                <td class="text-primary fs-5">@Model.TotalPayroll.ToString("N2")</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

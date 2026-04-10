@@ -1,0 +1,55 @@
+﻿@model SmartHR.Models.Ticket
+
+@{
+    ViewData["Title"] = "إدارة التذكرة";
+}
+
+<div class="pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-cog text-secondary me-2"></i> إدارة حالة التذكرة #@Model.Id</h1>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0 border-top border-secondary border-4">
+            <div class="card-body p-4">
+                <div class="alert alert-light border mb-4 shadow-sm">
+                    <h5 class="fw-bold mb-1">@Model.Subject</h5>
+                    <p class="text-muted small mb-0">بواسطة: @(Model.Employee?.FullName ?? "مجهول") | بتاريخ: @Model.CreatedAt.ToString("g")</p>
+                </div>
+
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="Subject" />
+                    <input type="hidden" asp-for="Description" />
+                    <input type="hidden" asp-for="EmployeeId" />
+                    <input type="hidden" asp-for="CreatedAt" />
+
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label asp-for="Priority" class="form-label fw-bold">تحديث الأولوية</label>
+                            <select asp-for="Priority" class="form-select">
+                                <option value="Low">عادية</option>
+                                <option value="Medium">متوسطة</option>
+                                <option value="High">عاجلة جداً</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Status" class="form-label fw-bold">تحديث الحالة</label>
+                            <select asp-for="Status" class="form-select border-primary">
+                                <option value="Open">مفتوحة</option>
+                                <option value="InProgress">قيد المراجعة / العمل</option>
+                                <option value="Closed">مغلقة (تم الحل)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                        <a asp-action="Index" class="btn btn-light border"><i class="fas fa-arrow-right me-1"></i> تراجع</a>
+                        <button type="submit" class="btn btn-secondary px-5"><i class="fas fa-save me-2"></i> حفظ التغييرات</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

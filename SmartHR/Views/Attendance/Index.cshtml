@@ -1,0 +1,58 @@
+@model IEnumerable<SmartHR.Models.Attendance>
+
+@{
+    ViewData["Title"] = "سجل الحضور والانصراف";
+}
+
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-clock text-warning me-2"></i> سجل الحضور والانصراف</h1>
+
+    <div class="btn-group">
+        @if (ViewBag.HasPunchedOut == true)
+        {
+            <div class="alert alert-success py-2 mb-0 shadow-sm border-0 d-flex align-items-center">
+                <i class="fas fa-check-double fa-lg me-2"></i> لقد أنهيت ورديتك لهذا اليوم بنجاح
+            </div>
+        }
+        else
+        {
+            @if (ViewBag.HasPunchedIn != true)
+            {
+                <form asp-action="PunchIn" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-success me-2 shadow-sm fw-bold px-4">
+                        <i class="fas fa-sign-in-alt me-1"></i> تسجيل حضور (Punch In)
+                    </button>
+                </form>
+            }
+            else
+            {
+                <form asp-action="PunchOut" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-danger shadow-sm fw-bold px-4">
+                        <i class="fas fa-sign-out-alt me-1"></i> تسجيل انصراف (Punch Out)
+                    </button>
+                </form>
+            }
+        }
+    </div>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+        <i class="fas fa-check-circle me-2"></i> @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="card shadow-sm border-0 border-top border-warning border-4">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+        <h6 class="m-0 fw-bold text-dark">حركات اليوم</h6>
+        @if (User.IsInRole(SmartHR.Models.AppRoles.SuperAdmin) || User.IsInRole(SmartHR.Models.AppRoles.Admin) || User.IsInRole(SmartHR.Models.AppRoles.HR))
+        {
+            <a asp-action="Create" class="btn btn-sm btn-outline-primary"><i class="fas fa-plus"></i> إضافة سجل يدوي</a>
+        }
+    </div>
+    <div class="card-body p-0">
+        <partial name="_AttendanceTable" model="Model" />
+    </div>
+</div>

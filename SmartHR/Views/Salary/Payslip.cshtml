@@ -1,0 +1,107 @@
+﻿@model SmartHR.Models.Salary
+
+@{
+    ViewData["Title"] = "Payslip - سند راتب";
+}
+
+<style>
+    @@media print {
+        body {
+            background-color: #fff !important;
+        }
+
+        header, nav, #sidebarMenu, .d-print-none {
+            display: none !important;
+        }
+
+        main {
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+
+        .card {
+            border: none !important;
+            box-shadow: none !important;
+        }
+
+        .payslip-container {
+            border: 2px solid #000 !important;
+            padding: 20px !important;
+        }
+    }
+
+    .payslip-container {
+        max-width: 800px;
+        margin: auto;
+        background: #fff;
+        padding: 30px;
+        border: 1px solid #ddd;
+        box-shadow: 0 0 15px rgba(0,0,0,0.05);
+    }
+
+    .company-logo {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #0d6efd;
+    }
+</style>
+
+<div class="d-print-none mb-3 text-center">
+    <button onclick="window.print()" class="btn btn-primary btn-lg shadow"><i class="fas fa-print me-2"></i> طباعة السند (Print Payslip)</button>
+    <a asp-action="Index" class="btn btn-secondary btn-lg ms-2">العودة</a>
+</div>
+
+<div class="payslip-container rounded">
+    <div class="row border-bottom pb-4 mb-4 align-items-center">
+        <div class="col-sm-6">
+            <div class="company-logo"><i class="fas fa-layer-group me-2"></i>SmartHR</div>
+            <p class="text-muted small mb-0 mt-1">شارع العليا العام، الرياض، المملكة العربية السعودية<br>info@smarthr.com | +966 12 345 6789</p>
+        </div>
+        <div class="col-sm-6 text-sm-end mt-3 mt-sm-0">
+            <h3 class="fw-bold text-uppercase mb-1">Payslip</h3>
+            <p class="text-muted fw-bold mb-0">سند راتب شهر: @Model.Month / @Model.Year</p>
+            <small class="text-muted">رقم المرجع: #PAY-@Model.Year@Model.Month-@Model.Id</small>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h6 class="fw-bold border-bottom pb-2">بيانات الموظف</h6>
+            <table class="table table-borderless table-sm mb-0">
+                <tr><td width="40%" class="text-muted">الاسم:</td><td class="fw-bold">@(Model.Employee?.FullName ?? "غير محدد")</td></tr>
+                <tr><td class="text-muted">الرقم الوظيفي:</td><td class="fw-bold">EMP-@Model.EmployeeId.ToString("D4")</td></tr>
+                <tr><td class="text-muted">القسم:</td><td class="fw-bold">@(Model.Employee?.Department?.Name ?? "---")</td></tr>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <h6 class="fw-bold border-bottom pb-2">تفاصيل الدفع</h6>
+            <table class="table table-borderless table-sm mb-0">
+                <tr><td width="40%" class="text-muted">تاريخ الإصدار:</td><td class="fw-bold">@Model.CreatedAt.ToString("dd/MM/yyyy")</td></tr>
+                <tr><td class="text-muted">حالة الدفع:</td><td class="fw-bold">@(Model.Status == "Paid" ? "تم التحويل" : "قيد الإجراء")</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="mb-5">
+        <partial name="_SalaryBreakdown" model="Model" />
+    </div>
+
+    <div class="row mt-5 pt-5 text-center">
+        <div class="col-4">
+            <hr class="w-75 mx-auto border-dark" />
+            <p class="fw-bold small">توقيع الموظف</p>
+        </div>
+        <div class="col-4">
+        </div>
+        <div class="col-4">
+            <hr class="w-75 mx-auto border-dark" />
+            <p class="fw-bold small">مدير الموارد البشرية</p>
+        </div>
+    </div>
+
+    <div class="text-center mt-4 small text-muted">
+        هذا السند تم إصداره آلياً من نظام SmartHR ولا يتطلب ختماً إذا كان معتمداً رقمياً.
+    </div>
+</div>

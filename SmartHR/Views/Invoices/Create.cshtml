@@ -1,0 +1,88 @@
+﻿@model SmartHR.Models.Invoice
+
+@{
+    ViewData["Title"] = "إصدار فاتورة جديدة";
+}
+
+<div class="pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-file-signature text-success me-2"></i> إصدار فاتورة / قيد مالي</h1>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="card shadow-sm border-0 mb-4 border-top border-success border-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-4 text-primary"><i class="fas fa-info-circle me-2"></i> البيانات الأساسية للفاتورة</h5>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <label asp-for="Type" class="form-label fw-bold">نوع الفاتورة</label>
+                            <select asp-for="Type" class="form-select">
+                                <option value="Sales">فاتورة مبيعات (إيراد)</option>
+                                <option value="Purchase">فاتورة مشتريات</option>
+                                <option value="Expense">سند مصروفات</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <label asp-for="ClientId" class="form-label fw-bold">العميل / المورد</label>
+                            <select asp-for="ClientId" class="form-select" asp-items="ViewBag.ClientId">
+                                <option value="">-- اختر الجهة --</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="Status" class="form-label fw-bold">حالة الدفع</label>
+                            <select asp-for="Status" class="form-select">
+                                <option value="Unpaid">غير مدفوعة (آجل)</option>
+                                <option value="Paid">مدفوعة (نقدي)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label asp-for="Date" class="form-label fw-bold">تاريخ الإصدار</label>
+                            <input asp-for="Date" type="date" class="form-control" value="@DateTime.Today.ToString("yyyy-MM-dd")" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="DueDate" class="form-label fw-bold">تاريخ الاستحقاق</label>
+                            <input asp-for="DueDate" type="date" class="form-control" value="@DateTime.Today.AddDays(15).ToString("yyyy-MM-dd")" required />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-4 text-primary"><i class="fas fa-calculator me-2"></i> المجاميع المالية</h5>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="SubTotal" class="form-label fw-bold">المجموع الفرعي</label>
+                            <input asp-for="SubTotal" type="number" step="0.01" class="form-control" required />
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="TaxAmount" class="form-label fw-bold">قيمة الضريبة</label>
+                            <input asp-for="TaxAmount" type="number" step="0.01" class="form-control" value="0" />
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="TotalAmount" class="form-label fw-bold text-success">الإجمالي النهائي</label>
+                            <input asp-for="TotalAmount" type="number" step="0.01" class="form-control border-success" required />
+                        </div>
+                    </div>
+
+                    <div class="mb-3 mt-3">
+                        <label asp-for="Notes" class="form-label fw-bold">ملاحظات / شروط الدفع</label>
+                        <textarea asp-for="Notes" class="form-control" rows="2"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <a asp-action="Index" class="btn btn-light border px-4">إلغاء</a>
+                <button type="submit" class="btn btn-success px-5"><i class="fas fa-save me-2"></i> حفظ الفاتورة</button>
+            </div>
+        </form>
+    </div>
+</div>

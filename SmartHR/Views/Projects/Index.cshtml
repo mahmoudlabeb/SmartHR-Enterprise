@@ -1,0 +1,67 @@
+﻿@model IEnumerable<SmartHR.Models.Project>
+
+@{
+    ViewData["Title"] = "إدارة المشاريع";
+}
+
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-project-diagram text-primary me-2"></i> إدارة المشاريع</h1>
+    <a asp-action="Create" class="btn btn-primary shadow-sm">
+        <i class="fas fa-plus me-1"></i> مشروع جديد
+    </a>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+        <i class="fas fa-check-circle me-2"></i> @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="row">
+    @if (!Model.Any())
+    {
+        <div class="col-12 text-center text-muted py-5">
+            <i class="fas fa-folder-open fa-3x mb-3 opacity-50"></i>
+            <h4>لا توجد مشاريع مسجلة حالياً</h4>
+        </div>
+    }
+    else
+    {
+        @foreach (var item in Model)
+        {
+            var borderColor = item.Status == "Active" ? "border-success" : item.Status == "Completed" ? "border-primary" : "border-warning";
+            var badgeClass = item.Status == "Active" ? "bg-success" : item.Status == "Completed" ? "bg-primary" : "bg-warning text-dark";
+            var statusText = item.Status == "Active" ? "نشط" : item.Status == "Completed" ? "مكتمل" : "معلق";
+
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 shadow-sm border-0 border-start @borderColor border-4 hover-shadow transition-all">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title fw-bold text-dark text-truncate" title="@item.Name">@item.Name</h5>
+                            <span class="badge @badgeClass">@statusText</span>
+                        </div>
+                        <p class="card-text text-muted small" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                            @(string.IsNullOrEmpty(item.Description) ? "لا يوجد وصف" : item.Description)
+                        </p>
+
+                        <hr class="bg-light" />
+
+                        <div class="d-flex justify-content-between small text-muted">
+                            <div><i class="far fa-calendar-alt me-1"></i> البداية: @item.StartDate.ToShortDateString()</div>
+                            @if (item.EndDate.HasValue)
+                            {
+                                <div><i class="far fa-flag me-1"></i> النهاية: @item.EndDate.Value.ToShortDateString()</div>
+                            }
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-top-0 d-flex justify-content-between">
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info w-100 me-2">لوحة المشروع</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-light text-secondary" title="تعديل"><i class="fas fa-edit"></i></a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>

@@ -1,0 +1,69 @@
+@model SmartHR.Models.Leave
+@{
+    ViewData["Title"] = "تقديم طلب إجازة";
+}
+
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2 fw-bold mb-0"><i class="fas fa-calendar-plus me-2" style="color:var(--success)"></i> تقديم طلب إجازة جديد</h1>
+    <a asp-action="Index" class="btn btn-outline-light border"><i class="fas fa-arrow-right me-1"></i> رجوع للطلبات</a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-lg">
+            <div class="card-body p-4">
+                <form asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger small"></div>
+
+                    <div class="row g-3">
+                        <div class="col-md-12 mb-2">
+                            <label asp-for="EmployeeId" class="form-label text-muted small fw-bold">اسم الموظف <span class="text-danger">*</span></label>
+                            <select asp-for="EmployeeId" asp-items="ViewBag.EmployeeId" class="form-select">
+                                <option value="">-- اختر الموظف --</option>
+                            </select>
+                            <span asp-validation-for="EmployeeId" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-4 mb-2">
+                            <label asp-for="LeaveType" class="form-label text-muted small fw-bold">نوع الإجازة <span class="text-danger">*</span></label>
+                            <select asp-for="LeaveType" class="form-select">
+                                <option value="Annual">سنوية (Annual)</option>
+                                <option value="Medical">مرضية (Medical)</option>
+                                <option value="Casual">عارضة (Casual)</option>
+                            </select>
+                            <span asp-validation-for="LeaveType" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-4 mb-2">
+                            <label asp-for="StartDate" class="form-label text-muted small fw-bold">تاريخ البداية <span class="text-danger">*</span></label>
+                            <input asp-for="StartDate" type="date" class="form-control" />
+                            <span asp-validation-for="StartDate" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-4 mb-2">
+                            <label asp-for="EndDate" class="form-label text-muted small fw-bold">تاريخ النهاية <span class="text-danger">*</span></label>
+                            <input asp-for="EndDate" type="date" class="form-control" />
+                            <span asp-validation-for="EndDate" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-12 mb-2">
+                            <label asp-for="Reason" class="form-label text-muted small fw-bold">سبب الإجازة (اختياري)</label>
+                            <textarea asp-for="Reason" class="form-control" rows="3" placeholder="اذكر سبب أو ملاحظة عن الإجازة..."></textarea>
+                            <span asp-validation-for="Reason" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2 justify-content-end mt-4 pt-3 border-top">
+                        <button type="submit" class="btn btn-success px-5 fw-bold">
+                            <i class="fas fa-paper-plane me-1"></i> تقديم الطلب
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

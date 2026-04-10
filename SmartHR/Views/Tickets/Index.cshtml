@@ -1,0 +1,90 @@
+﻿@model IEnumerable<SmartHR.Models.Ticket>
+
+@{
+    ViewData["Title"] = "نظام التذاكر والدعم";
+}
+
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-ticket-alt text-danger me-2"></i> تذاكر الدعم الفني</h1>
+    <a asp-action="Create" class="btn btn-danger shadow-sm">
+        <i class="fas fa-plus me-1"></i> تذكرة جديدة
+    </a>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+        <i class="fas fa-check-circle me-2"></i> @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="card shadow-sm border-0 border-top border-danger border-4">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light text-muted">
+                    <tr>
+                        <th class="ps-4">رقم التذكرة</th>
+                        <th>الموضوع</th>
+                        <th>بواسطة</th>
+                        <th class="text-center">الأولوية</th>
+                        <th class="text-center">الحالة</th>
+                        <th class="text-center">التاريخ</th>
+                        <th class="text-center">الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center py-5 text-muted">
+                                <i class="fas fa-inbox fa-3x mb-3 opacity-50"></i>
+                                <h5>صندوق التذاكر فارغ.</h5>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="ps-4 fw-bold text-muted">#@item.Id</td>
+                                <td class="fw-bold text-dark text-truncate" style="max-width: 200px;" title="@item.Subject">@item.Subject</td>
+                                <td><i class="fas fa-user-tie text-secondary me-1"></i> @(item.Employee?.FullName ?? "مجهول")</td>
+                                <td class="text-center">
+                                    @if (item.Priority == "High")
+                                    {
+                                        <span class="badge bg-danger">عاجلة</span>
+                                    }
+                                    else if (item.Priority == "Medium")
+                                    {
+
+                                        <span class="badge bg-warning text-dark">متوسطة</span>
+                                    }
+                                    else
+                                    {
+
+                                        <span class="badge bg-info">عادية</span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <span id="status-badge-@item.Id" class="badge @(item.Status == "Open" ? "bg-success" : item.Status == "InProgress" ? "bg-primary" : "bg-secondary")">
+                                        @(item.Status == "Open" ? "مفتوحة" : item.Status == "InProgress" ? "قيد المراجعة" : "مغلقة")
+                                    </span>
+                                </td>
+                                <td class="text-center text-muted small">@item.CreatedAt.ToString("dd MMM yyyy")</td>
+                                <td class="text-center">
+                                    <div class="btn-group shadow-sm">
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-light text-primary border" title="عرض التفاصيل والرد"><i class="fas fa-reply"></i> مراجعة</a>
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-light text-secondary border" title="تعديل الحالة"><i class="fas fa-cog"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

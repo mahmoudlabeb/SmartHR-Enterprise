@@ -1,0 +1,110 @@
+﻿@model SmartHR.Models.Invoice
+
+@{
+    ViewData["Title"] = "طباعة الفاتورة - " + Model.InvoiceNumber;
+}
+
+<style>
+    @@media print {
+        body {
+            background-color: #fff !important;
+        }
+
+        header, nav, #sidebarMenu, .d-print-none {
+            display: none !important;
+        }
+
+        main {
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+
+        .card {
+            border: none !important;
+            box-shadow: none !important;
+        }
+
+        .invoice-box {
+            border: 0 !important;
+            padding: 0 !important;
+            box-shadow: none !important;
+        }
+    }
+
+    .invoice-box {
+        max-width: 850px;
+        margin: auto;
+        background: #fff;
+        padding: 40px;
+        border: 1px solid #eee;
+        box-shadow: 0 0 20px rgba(0,0,0,0.05);
+    }
+
+    .invoice-header {
+        border-bottom: 2px solid #0d6efd;
+        padding-bottom: 20px;
+        margin-bottom: 30px;
+    }
+</style>
+
+<div class="d-print-none mb-4 text-center">
+    <button onclick="window.print()" class="btn btn-primary btn-lg shadow"><i class="fas fa-print me-2"></i> طباعة الفاتورة</button>
+    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary btn-lg ms-2">العودة</a>
+</div>
+
+<div class="invoice-box rounded">
+    <div class="invoice-header d-flex justify-content-between align-items-center">
+        <div>
+            <h2 class="fw-bold text-primary mb-0"><i class="fas fa-layer-group me-2"></i>SmartHR</h2>
+            <p class="text-muted small mb-0 mt-2">شارع التحلية، الرياض، المملكة العربية السعودية<br>الرقم الضريبي: 300123456789003</p>
+        </div>
+        <div class="text-end">
+            <h1 class="text-uppercase fw-bold text-dark mb-1">فاتورة ضريبية</h1>
+            <h5 class="text-muted mb-0">INVOICE</h5>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-sm-6">
+            <h6 class="text-muted text-uppercase small fw-bold mb-2">فاتورة إلى:</h6>
+            <h5 class="fw-bold mb-1">@(Model.Client?.FullName ?? "عميل نقدي")</h5>
+            <p class="text-muted small mb-0">
+                @(Model.Client?.CompanyName)<br>
+                @(Model.Client?.Address)<br>
+                @(Model.Client?.PhoneNumber)
+            </p>
+        </div>
+        <div class="col-sm-6 text-sm-end mt-4 mt-sm-0">
+            <table class="table table-sm table-borderless mb-0 float-sm-end" style="width: auto;">
+                <tr><td class="text-muted fw-bold text-end">رقم الفاتورة:</td><td class="fw-bold text-start ps-3">@Model.InvoiceNumber</td></tr>
+                <tr><td class="text-muted fw-bold text-end">تاريخ الإصدار:</td><td class="fw-bold text-start ps-3">@Model.Date.ToString("dd/MM/yyyy")</td></tr>
+                <tr><td class="text-muted fw-bold text-end">تاريخ الاستحقاق:</td><td class="fw-bold text-start ps-3">@Model.DueDate.ToString("dd/MM/yyyy")</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <partial name="_InvoiceItems" model="Model.Items" />
+
+    <div class="row mt-4">
+        <div class="col-sm-6">
+            @if (!string.IsNullOrEmpty(Model.Notes))
+            {
+                <h6 class="text-muted fw-bold small text-uppercase mb-2">الشروط والملاحظات:</h6>
+                <p class="small text-muted bg-light p-3 rounded">@Model.Notes</p>
+            }
+        </div>
+        <div class="col-sm-6">
+            <table class="table table-borderless">
+                <tr><td class="text-muted fw-bold">المجموع:</td><td class="text-end fw-bold">@Model.SubTotal.ToString("N2")</td></tr>
+                <tr><td class="text-muted fw-bold border-bottom pb-3">الضريبة المضافة:</td><td class="text-end fw-bold border-bottom pb-3">@Model.TaxAmount.ToString("N2")</td></tr>
+                <tr><td class="text-dark fw-bold fs-4 pt-3">الإجمالي:</td><td class="text-end fw-bold fs-4 text-primary pt-3">@Model.TotalAmount.ToString("N2")</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="text-center mt-5 pt-4 border-top">
+        <p class="text-muted small mb-0">نشكر لكم ثقتكم وتعاملكم معنا.</p>
+    </div>
+</div>

@@ -1,0 +1,74 @@
+﻿@model SmartHR.Models.Contact
+
+@{
+    ViewData["Title"] = "تعديل جهة الاتصال";
+}
+
+<div class="pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-edit text-primary me-2"></i> تحديث بيانات الاتصال</h1>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0 border-top border-primary border-4">
+            <div class="card-body p-4">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label asp-for="Name" class="form-label fw-bold">الاسم بالكامل <span class="text-danger">*</span></label>
+                            <input asp-for="Name" class="form-control" required />
+                            <span asp-validation-for="Name" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="ContactGroup" class="form-label fw-bold">مجموعة الاتصال</label>
+                            <select asp-for="ContactGroup" class="form-select">
+                                <option value="Vendor">مورد (Vendor)</option>
+                                <option value="Partner">شريك (Partner)</option>
+                                <option value="Freelancer">مستقل (Freelancer)</option>
+                                <option value="Other">أخرى</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label asp-for="Company" class="form-label fw-bold">الشركة / المؤسسة</label>
+                            <input asp-for="Company" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="JobTitle" class="form-label fw-bold">المسمى الوظيفي</label>
+                            <input asp-for="JobTitle" class="form-control" />
+                        </div>
+                    </div>
+
+                    <hr class="bg-light my-4" />
+
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label asp-for="Phone" class="form-label fw-bold">رقم الهاتف <span class="text-danger">*</span></label>
+                            <input asp-for="Phone" class="form-control" required />
+                            <span asp-validation-for="Phone" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Email" class="form-label fw-bold">البريد الإلكتروني</label>
+                            <input asp-for="Email" type="email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                        <a asp-action="Index" class="btn btn-light border"><i class="fas fa-arrow-right me-1"></i> تراجع</a>
+                        <button type="submit" class="btn btn-primary px-5"><i class="fas fa-save me-2"></i> حفظ التعديلات</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

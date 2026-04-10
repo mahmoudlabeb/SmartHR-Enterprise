@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  
+  <data name="SaveSuccess" xml:space="preserve"><value>تم الحفظ بنجاح.</value></data>
+  <data name="CreateSuccess" xml:space="preserve"><value>تم الإرسال/الإضافة بنجاح.</value></data>
+  <data name="UpdateSuccess" xml:space="preserve"><value>تم التعديل بنجاح.</value></data>
+  <data name="DeleteSuccess" xml:space="preserve"><value>تم الحذف بنجاح.</value></data>
+  <data name="ErrorOccurred" xml:space="preserve"><value>حدث خطأ غير متوقع. يرجى المحاولة لاحقاً.</value></data>
+  <data name="NotFound" xml:space="preserve"><value>العنصر غير موجود.</value></data>
+  <data name="AccessDenied" xml:space="preserve"><value>ليس لديك صلاحية للقيام بهذا الإجراء.</value></data>
+  <data name="PunchInSuccess" xml:space="preserve"><value>تم تسجيل الحضور بنجاح.</value></data>
+  <data name="PunchOutSuccess" xml:space="preserve"><value>تم تسجيل الانصراف بنجاح.</value></data>
+  <data name="AlreadyPunchedIn" xml:space="preserve"><value>لقد سجّلت حضورك بالفعل اليوم.</value></data>
+  <data name="LateRecord" xml:space="preserve"><value>سجل متأخر</value></data>
+  <data name="ID" xml:space="preserve"><value>م.</value></data>
+  <data name="EmployeeName" xml:space="preserve"><value>اسم الموظف</value></data>
+  <data name="Email" xml:space="preserve"><value>البريد الإلكتروني</value></data>
+  <data name="PhoneNumber" xml:space="preserve"><value>رقم الهاتف</value></data>
+  <data name="HireDate" xml:space="preserve"><value>تاريخ التعيين</value></data>
+  <data name="BasicSalary" xml:space="preserve"><value>الراتب الأساسي</value></data>
+  <data name="Department" xml:space="preserve"><value>القسم</value></data>
+  <data name="Designation" xml:space="preserve"><value>المسمى الوظيفي</value></data>
+  <data name="RequiredField" xml:space="preserve"><value>هذا الحقل مطلوب.</value></data>
+  <data name="InvalidEmail" xml:space="preserve"><value>البريد الإلكتروني غير صحيح.</value></data>
+  <data name="IsActive" xml:space="preserve"><value>نشط</value></data>
+  <data name="UserAccount" xml:space="preserve"><value>حساب المستخدم</value></data>
+  <data name="InvoiceNumber" xml:space="preserve"><value>رقم الفاتورة</value></data>
+  <data name="Client" xml:space="preserve"><value>العميل</value></data>
+  <data name="Project" xml:space="preserve"><value>المشروع</value></data>
+  <data name="Task" xml:space="preserve"><value>المهمة</value></data>
+  <data name="Status" xml:space="preserve"><value>الحالة</value></data>
+  <data name="DueDate" xml:space="preserve"><value>تاريخ الاستحقاق</value></data>
+  <data name="StartDate" xml:space="preserve"><value>تاريخ البدء</value></data>
+  <data name="EndDate" xml:space="preserve"><value>تاريخ الانتهاء</value></data>
+  <data name="Priority" xml:space="preserve"><value>الأولوية</value></data>
+  <data name="NetSalary" xml:space="preserve"><value>صافي الراتب</value></data>
+</root>

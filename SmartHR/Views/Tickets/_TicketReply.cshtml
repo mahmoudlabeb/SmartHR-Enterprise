@@ -1,0 +1,26 @@
+﻿@model IEnumerable<SmartHR.Models.TicketComment>
+
+<div class="chat-container pe-2" style="max-height: 400px; overflow-y: auto;" id="commentsContainer">
+    <ul class="list-unstyled" id="commentsList">
+        @if (Model == null || !Model.Any())
+        {
+            <li class="text-center text-muted py-4" id="noCommentsMsg">
+                <i class="far fa-comments fa-2x mb-2 opacity-50"></i>
+                <p class="mb-0 small">لا توجد ردود حتى الآن. كن أول من يعلق!</p>
+            </li>
+        }
+        else
+        {
+            @foreach (var comment in Model)
+            {
+                <li class="mb-3 border-bottom pb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <strong class="text-primary"><i class="fas fa-user-circle me-1"></i> @(comment.Employee?.FullName ?? "مستخدم")</strong>
+                        <span class="text-muted small"><i class="far fa-clock me-1"></i> @comment.CreatedAt.ToString("dd MMM, hh:mm tt")</span>
+                    </div>
+                    <p class="mb-0 text-dark ms-4" style="white-space: pre-wrap;">@comment.CommentText</p>
+                </li>
+            }
+        }
+    </ul>
+</div>

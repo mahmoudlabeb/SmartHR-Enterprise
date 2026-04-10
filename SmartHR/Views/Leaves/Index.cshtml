@@ -1,0 +1,96 @@
+@model IEnumerable<SmartHR.Models.Leave>
+
+@{
+    ViewData["Title"] = "إدارة طلبات الإجازات";
+}
+
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-calendar-check text-primary me-2"></i> إدارة الإجازات</h1>
+    <span class="badge bg-primary rounded-pill p-2">إجمالي الطلبات: @Model.Count()</span>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+        <i class="fas fa-check-circle me-2"></i> @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (ViewBag.AnnualLeaveBalance != null)
+{
+    var available = (int)ViewBag.AnnualLeaveBalance - (int)System.Math.Max((int)ViewBag.UsedAnnualLeaves, 0);
+    var percentage = (int)ViewBag.AnnualLeaveBalance > 0 ? (available * 100) / (int)ViewBag.AnnualLeaveBalance : 0;
+    <div class="card shadow-sm border-0 mb-4 border-start border-4 border-info">
+        <div class="card-body">
+            <h6 class="text-muted"><i class="fas fa-umbrella-beach me-2"></i> رصيد الإجازات السنوية الخاص بك</h6>
+            <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="fw-bold">متبقي: @available أيام من أصل @ViewBag.AnnualLeaveBalance</span>
+                <span class="badge bg-info">@percentage% متاح</span>
+            </div>
+            <div class="progress" style="height: 10px;">
+                <div class="progress-bar bg-info" role="progressbar" style="width: @percentage%;" aria-valuenow="@percentage" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light text-muted">
+                    <tr>
+                        <th class="ps-4">الموظف</th>
+                        <th>نوع الإجازة</th>
+                        <th>الفترة</th>
+                        <th class="text-center">المدة</th>
+                        <th class="text-center">الحالة</th>
+                        <th class="text-center">الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-4 fw-bold">@(item.Employee?.FullName ?? "غير معروف")</td>
+                            <td><span class="badge bg-secondary">@item.LeaveType</span></td>
+                            <td>
+                                <small class="d-block text-muted">من: @item.StartDate.ToShortDateString()</small>
+                                <small class="d-block text-muted">إلى: @item.EndDate.ToShortDateString()</small>
+                            </td>
+                            <td class="text-center fw-bold text-dark">
+                                @((item.EndDate - item.StartDate).Days + 1) يوم
+                            </td>
+                            <td class="text-center">
+                                @if (item.Status == "Pending")
+                                {
+                                    <span class="badge bg-warning text-dark"><i class="fas fa-hourglass-half me-1"></i> قيد الانتظار</span>
+                                }
+                                else if (item.Status == "Approved")
+                                {
+                                    <span class="badge bg-success"><i class="fas fa-check me-1"></i> مقبولة</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger"><i class="fas fa-times me-1"></i> مرفوضة</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                @if (item.Status == "Pending")
+                                {
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning shadow-sm me-1">
+                                        <i class="fas fa-edit me-1"></i> تعديل
+                                    </a>
+                                }
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary shadow-sm">
+                                    <i class="fas fa-eye me-1"></i> مراجعة
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

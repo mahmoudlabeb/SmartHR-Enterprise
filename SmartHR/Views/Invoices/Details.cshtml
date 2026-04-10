@@ -1,0 +1,94 @@
+﻿@model SmartHR.Models.Invoice
+
+@{
+    ViewData["Title"] = "تفاصيل الفاتورة";
+}
+
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-file-alt text-info me-2"></i> الفاتورة #@Model.InvoiceNumber</h1>
+    <div>
+        <a asp-action="Print" asp-route-id="@Model.Id" class="btn btn-secondary shadow-sm me-2"><i class="fas fa-print me-1"></i> طباعة</a>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary shadow-sm"><i class="fas fa-edit me-1"></i> تعديل</a>
+        <a asp-action="Index" class="btn btn-outline-dark shadow-sm ms-2"><i class="fas fa-arrow-right"></i></a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0 fw-bold"><i class="fas fa-list-ul text-primary me-2"></i> بنود الفاتورة</h5>
+            </div>
+            <div class="card-body p-4">
+                <partial name="_InvoiceItems" model="Model.Items" />
+
+                <div class="row justify-content-end mt-4">
+                    <div class="col-md-6">
+                        <table class="table table-borderless table-sm">
+                            <tr>
+                                <td class="text-muted fw-bold">المجموع الفرعي:</td>
+                                <td class="text-end fw-bold">@Model.SubTotal.ToString("N2")</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted fw-bold border-bottom pb-2">ضريبة القيمة المضافة:</td>
+                                <td class="text-end fw-bold border-bottom pb-2">@Model.TaxAmount.ToString("N2")</td>
+                            </tr>
+                            <tr>
+                                <td class="text-dark fw-bold fs-5 pt-2">الإجمالي المستحق:</td>
+                                <td class="text-end fw-bold fs-5 text-success pt-2">@Model.TotalAmount.ToString("N2")</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.Notes))
+        {
+            <div class="alert alert-light border shadow-sm">
+                <strong><i class="fas fa-comment-dots me-2"></i> ملاحظات:</strong>
+                <p class="mb-0 mt-2">@Model.Notes</p>
+            </div>
+        }
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 mb-4 bg-light">
+            <div class="card-body p-4">
+                <h6 class="fw-bold text-muted mb-3 text-uppercase">معلومات الفاتورة</h6>
+
+                <div class="mb-3">
+                    <small class="text-muted d-block">الحالة</small>
+                    @if (Model.Status == "Paid")
+                    {
+                        <span class="badge bg-success px-3 py-2 fs-6 mt-1"><i class="fas fa-check me-1"></i> مدفوعة</span>
+                    }
+                    else
+                    {
+
+                        <span class="badge bg-warning text-dark px-3 py-2 fs-6 mt-1"><i class="fas fa-hourglass-half me-1"></i> غير مدفوعة</span>
+                    }
+                </div>
+
+                <hr class="bg-secondary opacity-25" />
+
+                <div class="mb-3">
+                    <small class="text-muted d-block">العميل / الجهة</small>
+                    <h6 class="fw-bold mt-1">@(Model.Client?.FullName ?? "عميل نقدي")</h6>
+                </div>
+
+                <div class="mb-3">
+                    <small class="text-muted d-block">تاريخ الإصدار</small>
+                    <h6 class="fw-bold mt-1">@Model.Date.ToString("dd MMMM yyyy")</h6>
+                </div>
+
+                <div class="mb-0">
+                    <small class="text-muted d-block">تاريخ الاستحقاق</small>
+                    <h6 class="fw-bold mt-1 @(Model.DueDate < DateTime.Today && Model.Status != "Paid" ? "text-danger" : "")">
+                        @Model.DueDate.ToString("dd MMMM yyyy")
+                    </h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

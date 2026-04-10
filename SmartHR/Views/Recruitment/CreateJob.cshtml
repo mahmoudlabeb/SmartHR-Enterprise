@@ -1,0 +1,71 @@
+﻿@model SmartHR.Models.JobPosting
+
+@{
+    ViewData["Title"] = "طرح وظيفة جديدة";
+}
+
+<div class="pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-folder-plus text-success me-2"></i> طرح وظيفة جديدة</h1>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0 border-top border-success border-4">
+            <div class="card-body p-4">
+                <form asp-action="CreateJob">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Title" class="form-label fw-bold">المسمى الوظيفي <span class="text-danger">*</span></label>
+                        <input asp-for="Title" class="form-control form-control-lg" placeholder="مثال: مطور ويب، محاسب..." required />
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label asp-for="Department" class="form-label fw-bold">القسم المعني</label>
+                            <input asp-for="Department" class="form-control" placeholder="مثال: تقنية المعلومات" />
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Location" class="form-label fw-bold">مقر العمل</label>
+                            <input asp-for="Location" class="form-control" placeholder="مثال: الرياض، عن بعد..." />
+                        </div>
+                    </div>
+
+                    <div class="row bg-light p-3 rounded mb-4">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label asp-for="Type" class="form-label fw-bold">نوع الدوام</label>
+                            <select asp-for="Type" class="form-select">
+                                <option value="Full-Time">دوام كامل</option>
+                                <option value="Part-Time">دوام جزئي</option>
+                                <option value="Remote">عن بعد</option>
+                                <option value="Contract">عقد مؤقت</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Status" class="form-label fw-bold">حالة الوظيفة</label>
+                            <select asp-for="Status" class="form-select border-success">
+                                <option value="Open" selected>متاحة (استقبال الطلبات)</option>
+                                <option value="Closed">مغلقة</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label fw-bold">وصف الوظيفة والمهام</label>
+                        <textarea asp-for="Description" class="form-control" rows="4" required></textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Requirements" class="form-label fw-bold">الشروط والمتطلبات</label>
+                        <textarea asp-for="Requirements" class="form-control" rows="4"></textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-4 border-top pt-3">
+                        <a asp-action="Index" class="btn btn-light border">إلغاء</a>
+                        <button type="submit" class="btn btn-success px-5"><i class="fas fa-paper-plane me-2"></i> نشر الوظيفة</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

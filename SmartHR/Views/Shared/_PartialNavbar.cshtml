@@ -1,0 +1,51 @@
+@using SmartHR.Data
+@using Microsoft.EntityFrameworkCore
+@inject SmartHRContext _context
+@using System.Security.Claims
+
+<nav class="navbar navbar-expand-lg glass-navbar shadow-sm border-bottom">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
+            <i class="fas fa-layer-group me-2"></i> SmartHR
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="d-flex align-items-center order-lg-last">
+            <div class="nav-item dropdown me-3 position-relative border-start border-secondary border-opacity-25 ps-3 pt-1">
+                <a class="nav-link text-muted position-relative d-flex align-items-center" href="#" id="alertsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-bell fs-5"></i>
+                    <span class="badge rounded-pill bg-danger position-absolute top-0 start-50 translate-middle-x" id="notificationCount" style="display: none; font-size: 0.65rem;">0</span>
+                </a>
+                <ul id="notificationItems" class="dropdown-menu dropdown-menu-start shadow border-0" aria-labelledby="alertsDropdown" style="width: 320px; max-height: 400px; overflow-y: auto;">
+                    <li class="p-3 text-center text-muted small"><i class="fas fa-spinner fa-spin me-2"></i> جاري تحميل الإشعارات...</li>
+                </ul>
+            </div>
+
+            <div class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    @{
+                        var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                        var employee = await _context.Employees.AsNoTracking().FirstOrDefaultAsync(e => e.UserId == currentUserId);
+                        string displayName = employee?.FullName ?? User.Identity?.Name ?? "User";
+                        string avatarName = Uri.EscapeDataString(displayName);
+                    }
+                    <img src="https://ui-avatars.com/api/?name=@avatarName&background=6366f1&color=fff&size=30&bold=true" class="rounded-circle me-2 shadow-sm" alt="User">
+                    <span class="d-none d-md-inline fw-bold">@displayName</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow border-0" aria-labelledby="userDropdown">
+                    <li><a class="dropdown-item" href="#"><i class="fas fa-user-circle text-muted me-2"></i> الملف الشخصي</a></li>
+                    <li><a class="dropdown-item" asp-controller="Settings" asp-action="Index"><i class="fas fa-cog text-muted me-2"></i> إعدادات الإشعارات</a></li>
+                    <li><hr class="dropdown-divider border-secondary opacity-25"></li>
+                    <li>
+                        <form class="form-inline" asp-controller="Account" asp-action="Logout" method="post">
+                            <button type="submit" class="dropdown-item text-danger fw-bold"><i class="fas fa-sign-out-alt me-2"></i> تسجيل الخروج</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>

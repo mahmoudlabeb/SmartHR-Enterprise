@@ -1,0 +1,88 @@
+@model IEnumerable<SmartHR.Models.Message>
+@{
+    var currentUserId = ViewBag.CurrentUserId as string;
+    var otherUser = ViewBag.OtherUser as SmartHR.Models.ApplicationUser;
+    
+    ViewData["Title"] = "محادثة - " + otherUser?.FullName;
+}
+
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h3 fw-bold text-success"><i class="fas fa-comments me-2"></i> المحادثات</h1>
+    <a href="@Url.Action("Index", "Chat")" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-right me-1"></i> العودة للقائمة</a>
+</div>
+
+<div class="row h-100">
+    <!-- Messages View -->
+    <div class="col-md-8 mx-auto">
+        <div class="card shadow-sm border-0 d-flex flex-column h-100" style="min-height: 70vh;">
+            
+            <!-- Header -->
+            <div class="card-header bg-white border-bottom pb-3 pt-4 d-flex align-items-center">
+                <div class="fs-3 text-secondary me-3">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <h5 class="mb-0 fw-bold">@otherUser?.FullName</h5>
+                    <small class="text-success"><i class="fas fa-circle me-1" style="font-size: 8px;"></i> متصل</small>
+                </div>
+                <div class="ms-auto text-muted small">
+                    <i class="fas fa-envelope"></i> @otherUser?.Email
+                </div>
+            </div>
+
+            <!-- Thread Body -->
+            <div class="card-body p-4 bg-light overflow-auto" id="chat-thread" style="max-height: 60vh;">
+                @if (Model != null && Model.Any())
+                {
+                    <div class="d-flex flex-column mb-3 gap-3">
+                    @foreach (var msg in Model)
+                    {
+                        var isMe = msg.SenderId == currentUserId;
+                        
+                        <div class="d-flex w-100 @(isMe ? "justify-content-start" : "justify-content-end")">
+                            <div class="px-3 py-2 rounded-3 shadow-sm" style="max-width: 75%; @(isMe ? "background-color: var(--bs-primary); color: white;" : "background-color: white;")">
+                                <p class="mb-1 text-break">@msg.Content</p>
+                                <small class="@(isMe ? "text-light" : "text-muted")" style="font-size: 0.75rem;">
+                                    @msg.CreatedAt.ToLocalTime().ToString("g")
+                                    @if(isMe){
+                                        <i class="fas @(msg.IsRead ? "fa-check-double text-warning" : "fa-check text-light") ms-1"></i>
+                                    }
+                                </small>
+                            </div>
+                        </div>
+                    }
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center text-muted mt-5">
+                        <i class="fas fa-hand-holding-heart fa-2x mb-3 text-secondary"></i>
+                        <p>لا يوجد رسائل سابقة. ابدأ المحادثة الآن!</p>
+                    </div>
+                }
+            </div>
+
+            <!-- Composer / Input -->
+            <div class="card-footer bg-white border-top p-3">
+                <form asp-action="SendMessage" method="post" class="d-flex gap-2">
+                    <input type="hidden" name="receiverId" value="@otherUser?.Id" />
+                    <input type="text" name="content" class="form-control px-4 rounded-pill" placeholder="اكتب رسالتك هنا..." required autocomplete="off" />
+                    <button type="submit" class="btn btn-primary rounded-circle" style="width: 44px; height: 44px; padding: 0;">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Scroll to bottom of chat automatically
+            var thread = document.getElementById("chat-thread");
+            thread.scrollTop = thread.scrollHeight;
+        });
+    </script>
+}

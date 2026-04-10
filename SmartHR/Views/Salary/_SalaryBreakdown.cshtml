@@ -1,0 +1,71 @@
+﻿@model SmartHR.Models.Salary
+
+@{
+    var totalAllowances = Model.HousingAllowance + Model.TransportAllowance + Model.OtherAllowances;
+    var totalDeductions = Model.TaxDeduction + Model.AbsenceDeduction + Model.OtherDeductions;
+    var grossSalary = Model.BasicSalary + totalAllowances;
+    var calculatedNet = grossSalary - totalDeductions;
+}
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card border-success shadow-sm h-100">
+            <div class="card-header bg-success text-white fw-bold">
+                <i class="fas fa-plus-circle me-2"></i> المستحقات (Earnings)
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    الراتب الأساسي
+                    <span class="fw-bold">@Model.BasicSalary.ToString("N2")</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center text-muted">
+                    بدل السكن
+                    <span>@Model.HousingAllowance.ToString("N2")</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center text-muted">
+                    بدل المواصلات
+                    <span>@Model.TransportAllowance.ToString("N2")</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center text-muted">
+                    بدلات أخرى
+                    <span>@Model.OtherAllowances.ToString("N2")</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center bg-light fw-bold text-success">
+                    إجمالي المستحقات
+                    <span>@grossSalary.ToString("N2")</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card border-danger shadow-sm h-100">
+            <div class="card-header bg-danger text-white fw-bold">
+                <i class="fas fa-minus-circle me-2"></i> الاستقطاعات (Deductions)
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex justify-content-between align-items-center text-muted">
+                    الضرائب / التأمينات
+                    <span>@Model.TaxDeduction.ToString("N2")</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center text-muted">
+                    خصم الغياب / التأخير
+                    <span>@Model.AbsenceDeduction.ToString("N2")</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center text-muted">
+                    استقطاعات أخرى
+                    <span>@Model.OtherDeductions.ToString("N2")</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center bg-light fw-bold text-danger mt-auto">
+                    إجمالي الاستقطاعات
+                    <span>@totalDeductions.ToString("N2")</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="alert alert-info border-0 shadow-sm d-flex justify-content-between align-items-center">
+    <h5 class="mb-0 fw-bold"><i class="fas fa-wallet me-2"></i> صافي الراتب المستحق (Net Salary)</h5>
+    <h3 class="mb-0 fw-bold text-primary">@calculatedNet.ToString("N2")</h3>
+</div>

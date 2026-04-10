@@ -1,0 +1,133 @@
+@model SmartHR.Services.EmployeeAgendaViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+@{
+    ViewData["Title"] = Localizer["EmployeeAgendaTitle"];
+    var emp = Model.TargetEmployee;
+    var year = Model.Year;
+    var totalHours = Model.TotalHoursWorked;
+}
+
+<div class="container-fluid py-4">
+    <!-- Header Card -->
+    <div class="card shadow-lg border-0 bg-dark text-white mb-4 animate__animated animate__fadeIn">
+        <div class="card-body p-4 d-flex justify-content-between align-items-center">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-2">
+                        <li class="breadcrumb-item"><a href="/" class="text-primary text-decoration-none">@Localizer["Main"]</a></li>
+                        <li class="breadcrumb-item active text-white-50" aria-current="page">@Localizer["EmployeeAgenda"]</li>
+                    </ol>
+                </nav>
+                <h2 class="mb-0 fw-bold"><i class="fas fa-calendar-alt text-primary me-3"></i> @Localizer["EmployeeAgenda"]: @emp?.FullName</h2>
+            </div>
+            <div class="d-flex gap-3">
+                <form class="d-flex gap-2" method="get">
+                    @if (ViewBag.EmployeesList != null)
+                    {
+                        <select name="employeeId" class="form-select bg-dark text-white border-secondary" asp-items="ViewBag.EmployeesList">
+                            <option value="">-- @Localizer["SelectEmployee"] --</option>
+                        </select>
+                    }
+                    <input type="number" name="year" value="@year" class="form-control bg-dark text-white border-secondary" style="max-width: 100px;" />
+                    <button type="submit" class="btn btn-primary shadow-sm px-4">@Localizer["Show"]</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Stats -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 bg-dark text-white h-100 overflow-hidden position-relative">
+                <div class="card-body p-4 position-relative z-1">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="stats-icon bg-success-soft rounded-circle p-3 me-3">
+                            <i class="fas fa-clock text-success fa-2x"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-white-50 mb-0 uppercase tracking-wider">@Localizer["ActualWorkHours"] - @year</h6>
+                            <h2 class="mb-0 fw-bold text-success">@totalHours @Localizer["Hours"]</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="stats-bg-icon position-absolute bottom-0 end-0 opacity-10">
+                    <i class="fas fa-clock fa-7x translate-middle-y"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 bg-dark text-white h-100 overflow-hidden position-relative">
+                <div class="card-body p-4 position-relative z-1">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="stats-icon bg-info-soft rounded-circle p-3 me-3">
+                            <i class="fas fa-umbrella-beach text-info fa-2x"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-white-50 mb-0 uppercase tracking-wider">@Localizer["TotalApprovedLeaves"] - @year</h6>
+                            <h2 class="mb-0 fw-bold text-info">@Model.ApprovedLeaves.Count() @Localizer["Leaves"]</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="stats-bg-icon position-absolute bottom-0 end-0 opacity-10">
+                    <i class="fas fa-umbrella-beach fa-7x translate-middle-y"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaves Table -->
+    <div class="card shadow-sm border-0 bg-dark text-white overflow-hidden">
+        <div class="card-header bg-dark border-secondary py-3 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold"><i class="fas fa-list-ul me-2 text-primary"></i> @Localizer["LeaveRecords"]</h5>
+            <button class="btn btn-outline-light btn-sm px-3" onclick="window.print()"><i class="fas fa-print me-2"></i> @Localizer["Print"]</button>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-dark table-hover mb-0 align-middle">
+                    <thead class="bg-dark-light">
+                        <tr>
+                            <th class="ps-4">@Localizer["LeaveType"]</th>
+                            <th>@Localizer["StartDate"]</th>
+                            <th>@Localizer["EndDate"]</th>
+                            <th>@Localizer["Duration"]</th>
+                            <th class="pe-4">@Localizer["Reason"]</th>
+                        </tr>
+                    </thead>
+                    <tbody class="border-top-0">
+                        @if (!Model.ApprovedLeaves.Any())
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center py-5">
+                                    <div class="d-flex flex-column align-items-center text-white-50">
+                                        <i class="fas fa-calendar-times fa-3x mb-3"></i>
+                                        <p class="mb-0">@Localizer["NoLeavesFoundForYear"]</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                        @foreach (var l in Model.ApprovedLeaves)
+                        {
+                            <tr>
+                                <td class="ps-4"><span class="fw-bold">@l.LeaveType</span></td>
+                                <td><span class="badge bg-light text-dark px-3 py-2">@l.StartDate.ToShortDateString()</span></td>
+                                <td><span class="badge bg-light text-dark px-3 py-2">@l.EndDate.ToShortDateString()</span></td>
+                                <td><span class="text-primary fw-bold">@((l.EndDate - l.StartDate).Days + 1) @Localizer["Days"]</span></td>
+                                <td class="pe-4 text-white-50">@l.Reason</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-dark-light { background-color: rgba(255, 255, 255, 0.05); }
+    .bg-success-soft { background-color: rgba(16, 185, 129, 0.15); }
+    .bg-info-soft { background-color: rgba(14, 165, 233, 0.15); }
+    .uppercase { text-transform: uppercase; }
+    .tracking-wider { letter-spacing: 0.1em; }
+</style>

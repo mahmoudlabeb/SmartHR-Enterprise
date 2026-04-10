@@ -1,0 +1,129 @@
+@using SmartHR.ViewModels
+@model DashboardViewModel
+
+@{
+    ViewData["Title"] = "لوحة القيادة (بوابة الموظف)";
+}
+
+<div class="row align-items-center pt-3 pb-2 mb-4">
+    <div class="col-md-6">
+        <h2 class="fw-bold fs-4 mb-1 text-white">مرحباً بعودتك، @(Model.EmployeeName ?? "الموظف")! 👋</h2>
+        <p class="text-muted small mb-0">إليك ملخص سريع لمهامك وحضورك اليوم.</p>
+    </div>
+    <div class="col-md-6 text-md-end mt-3 mt-md-0">
+        <a asp-controller="Attendance" asp-action="Index" class="btn btn-primary shadow-sm fw-bold px-4 hover-elevate">
+            <i class="fas fa-clock me-1"></i> إدارة الحضور والانصراف
+        </a>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    <!-- My Tasks -->
+    <div class="col-xl-6 col-md-6">
+        <div class="card h-100 py-3 shadow-lg border-0 bg-dark hover-elevate" style="border-left: 4px solid #f59e0b !important;">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col me-2">
+                        <div class="h6 fw-bold mb-2 text-warning text-uppercase" style="letter-spacing: 1px;">المهام المعلقة</div>
+                        <div class="display-6 mb-0 fw-bold text-white">@Model.MyOpenTasks</div>
+                        <a href="/Tasks" class="btn btn-sm btn-link text-warning p-0 mt-3 text-decoration-none fw-bold">الذهاب لطلبات العمل <i class="fas fa-arrow-left fa-sm ms-1"></i></a>
+                    </div>
+                    <div class="col-auto">
+                        <div class="rounded-circle p-4 bg-warning bg-opacity-10 shadow-sm border border-warning border-opacity-25">
+                            <i class="fas fa-tasks fa-2x text-warning"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- My Leaves -->
+    <div class="col-xl-6 col-md-6">
+        <div class="card h-100 py-3 shadow-lg border-0 bg-dark hover-elevate" style="border-left: 4px solid #10b981 !important;">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col me-2">
+                        <div class="h6 fw-bold mb-2 text-success text-uppercase" style="letter-spacing: 1px;">الإجازات قيد الانتظار</div>
+                        <div class="display-6 mb-0 fw-bold text-white">@Model.MyPendingLeaves</div>
+                        <a href="/Leaves" class="btn btn-sm btn-link text-success p-0 mt-3 text-decoration-none fw-bold">تفاصيل الإجازات <i class="fas fa-arrow-left fa-sm ms-1"></i></a>
+                    </div>
+                    <div class="col-auto">
+                        <div class="rounded-circle p-4 bg-success bg-opacity-10 shadow-sm border border-success border-opacity-25">
+                            <i class="fas fa-calendar-check fa-2x text-success"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Quick Actions -->
+    <div class="col-lg-4">
+        <div class="card h-100 border-0 shadow-lg bg-dark">
+            <div class="card-header bg-dark border-bottom border-light border-opacity-10 pt-4 pb-3">
+                <h6 class="m-0 fw-bold text-white"><i class="fas fa-rocket me-2 text-primary"></i> إجراءات سريعة</h6>
+            </div>
+            <div class="card-body p-4">
+                <div class="d-grid gap-3">
+                    <a asp-controller="Leaves" asp-action="Create" class="btn btn-dark text-start p-3 d-flex align-items-center justify-content-between rounded-3 border border-secondary border-opacity-25 hover-bg-light">
+                        <span><i class="fas fa-calendar-plus text-success me-3"></i> طلب إجازة جديدة</span>
+                        <i class="fas fa-chevron-left text-muted opacity-50 fa-sm"></i>
+                    </a>
+                    <a asp-controller="Tickets" asp-action="Create" class="btn btn-dark text-start p-3 d-flex align-items-center justify-content-between rounded-3 border border-secondary border-opacity-25 hover-bg-light">
+                        <span><i class="fas fa-ticket-alt text-danger me-3"></i> تذكرة دعم فني</span>
+                        <i class="fas fa-chevron-left text-muted opacity-50 fa-sm"></i>
+                    </a>
+                    <a asp-controller="Attendance" asp-action="Index" class="btn btn-dark text-start p-3 d-flex align-items-center justify-content-between rounded-3 border border-secondary border-opacity-25 hover-bg-light">
+                        <span><i class="fas fa-clock text-info me-3"></i> سجل الحضور والانصراف</span>
+                        <i class="fas fa-chevron-left text-muted opacity-50 fa-sm"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Latest Notifications -->
+    <div class="col-lg-8">
+        <div class="card h-100 border-0 shadow-lg bg-dark">
+            <div class="card-header bg-dark border-bottom border-light border-opacity-10 pt-4 pb-3">
+                <h6 class="m-0 fw-bold text-white"><i class="fas fa-bell me-2 text-warning"></i> أحدث المستجدات</h6>
+            </div>
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center p-3 bg-opacity-10 bg-info rounded-3 border border-info border-opacity-25 mb-4 shadow-sm animate-pulse">
+                    <div class="bg-info rounded-circle p-3 me-3 text-white shadow-sm">
+                        <i class="fas fa-rocket fa-lg"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-1 text-white">مرحباً بك في البوابة الجديدة!</h6>
+                        <p class="mb-0 text-muted small">تم تحديث واجهة الخدمة الذاتية لتوفير تجربة أسرع وأكثر وضوحاً.</p>
+                    </div>
+                </div>
+                
+                <div class="text-center text-muted py-5 rounded-3 bg-dark border border-dashed border-secondary border-opacity-50 mt-2">
+                    <div class="mb-3 opacity-25">
+                        <i class="fas fa-inbox fa-3x"></i>
+                    </div>
+                    <p class="mb-0 small">لا توجد إشعارات أخرى في الوقت الحالي.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .hover-elevate { transition: transform 0.2s, box-shadow 0.2s; }
+    .hover-elevate:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.5) !important; }
+    .bg-dark { background-color: #1a1d21 !important; }
+    .hover-bg-light:hover { background-color: rgba(255,255,255,0.05) !important; border-color: var(--accent-primary) !important; }
+    .border-dashed { border-style: dashed !important; }
+    
+    @@keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.005); }
+        100% { transform: scale(1); }
+    }
+    .animate-pulse { animation: pulse 3s infinite ease-in-out; }
+</style>

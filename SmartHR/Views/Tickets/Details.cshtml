@@ -1,0 +1,139 @@
+﻿@model SmartHR.Models.Ticket
+
+@{
+    ViewData["Title"] = "تفاصيل التذكرة والردود";
+}
+
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-headset text-info me-2"></i> متابعة التذكرة #@Model.Id</h1>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-secondary shadow-sm me-2"><i class="fas fa-cog"></i> تغيير الحالة</a>
+        <a asp-action="Index" class="btn btn-outline-dark shadow-sm"><i class="fas fa-arrow-right me-1"></i> العودة</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-5 mb-4">
+        <div class="card shadow-sm border-0 border-top border-info border-4 h-100">
+            <div class="card-header bg-white pb-0 border-0 pt-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="badge @(Model.Status == "Open" ? "bg-success" : Model.Status == "InProgress" ? "bg-primary" : "bg-secondary") fs-6" id="status-badge-@Model.Id">
+                        @(Model.Status == "Open" ? "مفتوحة" : Model.Status == "InProgress" ? "قيد المراجعة" : "مغلقة")
+                    </span>
+                    <span class="badge @(Model.Priority == "High" ? "bg-danger" : "bg-warning text-dark")">@Model.Priority</span>
+                </div>
+                <h4 class="fw-bold text-dark mt-3">@Model.Subject</h4>
+            </div>
+            <div class="card-body">
+                <div class="bg-light p-3 rounded mb-4" style="min-height: 120px;">
+                    <p class="mb-0" style="white-space: pre-wrap;">@Model.Description</p>
+                </div>
+
+                @if(!string.IsNullOrEmpty(Model.AttachmentUrl))
+                {
+                    <div class="alert alert-secondary d-flex justify-content-between align-items-center mb-4 py-2">
+                        <span><i class="fas fa-paperclip me-2 text-primary"></i> المرفقات:</span>
+                        <a href="@Model.AttachmentUrl" target="_blank" class="btn btn-sm btn-outline-primary"><i class="fas fa-download me-1"></i> تحميل</a>
+                    </div>
+                }
+
+                <hr class="bg-light" />
+
+                <ul class="list-group list-group-flush small">
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        <span class="text-muted fw-bold">بواسطة:</span>
+                        <span class="fw-bold text-primary"><i class="fas fa-user-circle me-1"></i> @(Model.Employee?.FullName ?? "غير معروف")</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        <span class="text-muted fw-bold">تاريخ الإنشاء:</span>
+                        <span>@Model.CreatedAt.ToString("dd MMMM yyyy, hh:mm tt")</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-7 mb-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-white fw-bold py-3">
+                <i class="fas fa-comments text-primary me-2"></i> سجل المتابعة والردود
+            </div>
+
+            <div class="card-body bg-light">
+                <partial name="_TicketReply" model="Model.Comments" />
+            </div>
+
+            <div class="card-footer bg-white p-3">
+                <form id="commentForm">
+                    <input type="hidden" id="ticketId" value="@Model.Id" />
+
+                    @if (Model.Status == "Closed")
+                    {
+                        <div class="alert alert-secondary mb-0 text-center">
+                            <i class="fas fa-lock me-2"></i> هذه التذكرة مغلقة ولا يمكن إضافة ردود جديدة عليها.
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="input-group">
+                            <input type="text" id="commentText" class="form-control" placeholder="اكتب ردك هنا..." required autocomplete="off" />
+                            <button type="submit" class="btn btn-primary px-4"><i class="fas fa-paper-plane me-1"></i> إرسال</button>
+                        </div>
+                    }
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @if (Model.Status != "Closed")
+    {
+        <script>
+            document.getElementById("commentForm").addEventListener("submit", function (e) {
+                e.preventDefault();
+
+                var tId = document.getElementById("ticketId").value;
+                var text = document.getElementById("commentText").value;
+
+                if (!text.trim()) return;
+
+                // إرسال التعليق للـ Controller الذي سيرسله بدوره عبر SignalR
+                fetch(`/Tickets/AddComment?ticketId=${tId}&text=${encodeURIComponent(text)}`, {
+                    method: 'POST'
+                }).then(response => {
+                    if (response.ok) {
+                        document.getElementById("commentText").value = '';
+                    }
+                });
+            });
+
+            // استقبال الردود اللحظية
+            if (typeof connection !== 'undefined') {
+                connection.on("ReceiveTicketComment", function (ticketId, userName, commentText, timeStr) {
+                    if (ticketId == document.getElementById("ticketId").value) {
+
+                        // إخفاء رسالة "لا توجد ردود" إذا كانت موجودة
+                        var noMsg = document.getElementById("noCommentsMsg");
+                        if(noMsg) noMsg.style.display = "none";
+
+                        var li = document.createElement("li");
+                        li.className = "mb-3 border-bottom pb-3";
+                        li.innerHTML = `
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <strong class="text-success"><i class="fas fa-user-circle me-1"></i> ${userName}</strong>
+                                <span class="text-muted small"><i class="far fa-clock me-1"></i> ${timeStr}</span>
+                            </div>
+                            <p class="mb-0 text-dark ms-4" style="white-space: pre-wrap;">${commentText}</p>
+                        `;
+
+                        document.getElementById("commentsList").appendChild(li);
+
+                        var container = document.getElementById("commentsContainer");
+                        container.scrollTop = container.scrollHeight;
+                    }
+                });
+            }
+        </script>
+    }
+}

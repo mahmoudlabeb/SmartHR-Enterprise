@@ -1,0 +1,73 @@
+@using Microsoft.AspNetCore.Identity
+@model IEnumerable<IdentityRole>
+
+@{
+    ViewData["Title"] = "إدارة الأدوار (الرتب)";
+}
+
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-user-shield text-primary me-2"></i> إدارة الأدوار والصلاحيات</h1>
+    <a asp-action="Create" class="btn btn-primary shadow-sm">
+        <i class="fas fa-plus me-1"></i> إضافة دور جديد
+    </a>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+        <i class="fas fa-check-circle me-2"></i> @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="card shadow-sm border-0 border-top border-primary border-4">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4" width="40%">اسم الدور (Role Name)</th>
+                        <th width="30%" class="text-center">معرف الدور (ID)</th>
+                        <th width="30%" class="text-center">إدارة الصلاحيات والخيارات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="3" class="text-center py-5 text-muted">
+                                <i class="fas fa-shield-alt fa-3x mb-3 opacity-50"></i>
+                                <h5>لا توجد أدوار مسجلة.</h5>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var role in Model)
+                        {
+                            <tr>
+                                <td class="ps-4 fw-bold text-dark">
+                                    <i class="fas fa-user-tag text-secondary me-2"></i>@role.Name
+                                </td>
+                                <td class="text-center text-muted small user-select-all">@role.Id</td>
+                                <td class="text-center">
+                                    <div class="btn-group shadow-sm">
+                                        <a asp-action="AssignPermissions" asp-route-roleId="@role.Id" class="btn btn-sm btn-light text-success border fw-bold" title="إدارة الصلاحيات الشاشات">
+                                            <i class="fas fa-key me-1"></i> الصلاحيات
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@role.Id" class="btn btn-sm btn-light text-primary border" title="تعديل الاسم"><i class="fas fa-edit"></i></a>
+
+                                        @if (role.Name != "SuperAdmin")
+                                        {
+                                            <a asp-action="Delete" asp-route-id="@role.Id" class="btn btn-sm btn-light text-danger border" title="حذف الدور" onclick="return confirm('هل أنت متأكد من حذف هذا الدور؟ سيؤثر ذلك على المستخدمين المرتبطين به.');"><i class="fas fa-trash"></i></a>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,62 @@
+﻿@model SmartHR.Models.Employee
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label asp-for="FullName" class="form-label fw-bold">الاسم بالكامل <span class="text-danger">*</span></label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-user"></i></span>
+            <input asp-for="FullName" class="form-control" placeholder="أدخل اسم الموظف" required />
+        </div>
+        <span asp-validation-for="FullName" class="text-danger small"></span>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <label asp-for="Email" class="form-label fw-bold">البريد الإلكتروني <span class="text-danger">*</span></label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+            <input asp-for="Email" type="email" class="form-control" placeholder="name@company.com" required />
+        </div>
+        <span asp-validation-for="Email" class="text-danger small"></span>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <label asp-for="DepartmentId" class="form-label fw-bold">القسم التابع له <span class="text-danger">*</span></label>
+        <select asp-for="DepartmentId" class="form-select" asp-items="ViewBag.DepartmentId">
+            <option value="">-- اختر القسم --</option>
+        </select>
+        <span asp-validation-for="DepartmentId" class="text-danger small"></span>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <label asp-for="DesignationId" class="form-label fw-bold">المسمى الوظيفي <span class="text-danger">*</span></label>
+        <select asp-for="DesignationId" class="form-select" asp-items="ViewBag.DesignationId">
+            <option value="">-- اختر المسمى الوظيفي --</option>
+        </select>
+        <span asp-validation-for="DesignationId" class="text-danger small"></span>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <label asp-for="BasicSalary" class="form-label fw-bold">الراتب الأساسي</label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-money-bill-wave"></i></span>
+            <input asp-for="BasicSalary" type="number" step="0.01" class="form-control" placeholder="0.00" />
+        </div>
+        <span asp-validation-for="BasicSalary" class="text-danger small"></span>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <label asp-for="HireDate" class="form-label fw-bold">تاريخ التعيين</label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+            <input asp-for="HireDate" type="date" class="form-control" />
+        </div>
+        <span asp-validation-for="HireDate" class="text-danger small"></span>
+    </div>
+
+    <div class="col-md-12 mt-2">
+        <div class="form-check form-switch fs-5">
+            <input class="form-check-input" type="checkbox" asp-for="IsActive" checked="@(Model?.IsActive ?? true)">
+            <label class="form-check-label ms-2" asp-for="IsActive">حساب الموظف نشط (يمكنه تسجيل الدخول)</label>
+        </div>
+    </div>
+</div>

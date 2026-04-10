@@ -1,0 +1,96 @@
+@model IEnumerable<SmartHR.Models.ApplicationUser>
+@{
+    ViewData["Title"] = "طلبات التسجيل المعلقة";
+}
+
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom border-secondary border-opacity-25">
+    <div>
+        <h1 class="h2 fw-bold"><i class="fas fa-user-clock text-warning me-2"></i> طلبات التسجيل المعلقة</h1>
+        <p class="text-muted">قم بمراجعة واعتماد الحسابات الجديدة وتحديد صلاحياتهم.</p>
+    </div>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm" role="alert" style="border-right: 4px solid #198754 !important;">
+        <i class="fas fa-check-circle me-2"></i> @TempData["SuccessMessage"]
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm" role="alert" style="border-right: 4px solid #dc3545 !important;">
+        <i class="fas fa-exclamation-circle me-2"></i> @TempData["ErrorMessage"]
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover table-borderless align-middle mb-0">
+                <thead class="table-dark text-muted small text-uppercase">
+                    <tr>
+                        <th class="ps-4 rounded-start">الاسم</th>
+                        <th>البريد الإلكتروني</th>
+                        <th>تاريخ التسجيل</th>
+                        <th>الحالة</th>
+                        <th class="text-end pe-4 rounded-end">الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-5 text-muted">
+                                <i class="fas fa-check-double fa-3x mb-3 opacity-25"></i>
+                                <p class="mb-0">لا توجد طلبات تسجيل معلقة حالياً.</p>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var user in Model)
+                        {
+                            <tr class="border-bottom border-secondary border-opacity-10">
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-primary bg-opacity-25 text-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0 fw-bold">@user.FullName</h6>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>@user.Email</td>
+                                <td>@user.HireDate.ToString("yyyy-MM-dd HH:mm")</td>
+                                <td><span class="badge bg-warning text-dark"><i class="fas fa-hourglass-half me-1"></i> بانتظار الاعتماد</span></td>
+                                <td class="text-end pe-4">
+                                    <form asp-action="Approve" method="post" class="d-inline-block">
+                                        <input type="hidden" name="userId" value="@user.Id" />
+                                        <div class="input-group input-group-sm">
+                                            <select name="roleName" class="form-select bg-dark text-white border-secondary" required>
+                                                <option value="" disabled selected>-- اختر الصلاحية --</option>
+                                                <option value="Employee">موظف (Employee)</option>
+                                                <option value="Manager">مدير قسم (Manager)</option>
+                                                <option value="HR">موارد بشرية (HR)</option>
+                                                <option value="Client">عميل / زائر (Client)</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> اعتماد</button>
+                                        </div>
+                                    </form>
+                                    
+                                    <form asp-action="Reject" method="post" class="d-inline-block ms-1" onsubmit="return confirm('هل أنت متأكد من رفض وحذف هذا الطلب؟');">
+                                        <input type="hidden" name="userId" value="@user.Id" />
+                                        <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fas fa-times"></i> رفض</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,76 @@
+﻿@model SmartHR.ViewModels.AttendanceReportViewModel
+@{
+    ViewData["Title"] = "تقرير الحضور والانصراف";
+}
+
+<style>
+    @@media print {
+        body {
+            background-color: #fff !important;
+        }
+
+        .d-print-none {
+            display: none !important;
+        }
+
+        .card {
+            border: none !important;
+            box-shadow: none !important;
+        }
+    }
+</style>
+
+<div class="d-print-none d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-user-clock text-info me-2"></i> تقرير الحضور والانصراف</h1>
+    <button onclick="window.print()" class="btn btn-secondary shadow-sm"><i class="fas fa-print me-1"></i> طباعة التقرير</button>
+</div>
+
+<div class="card shadow-sm border-0 mb-4 d-print-none bg-light">
+    <div class="card-body">
+        <form method="get" class="row align-items-end">
+            <div class="col-md-4 mb-3 mb-md-0">
+                <label asp-for="FromDate" class="form-label fw-bold">من تاريخ</label>
+                <input asp-for="FromDate" type="date" class="form-control" />
+            </div>
+            <div class="col-md-4 mb-3 mb-md-0">
+                <label asp-for="ToDate" class="form-label fw-bold">إلى تاريخ</label>
+                <input asp-for="ToDate" type="date" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-info text-white w-100"><i class="fas fa-search me-1"></i> استخراج</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="d-none d-print-block text-center mb-4">
+    <h3 class="fw-bold">تقرير الحضور (من @Model.FromDate.ToString("dd/MM/yyyy") إلى @Model.ToDate.ToString("dd/MM/yyyy"))</h3>
+</div>
+
+<div class="table-responsive shadow-sm rounded border">
+    <table class="table table-hover table-bordered mb-0 text-center">
+        <thead class="table-light">
+            <tr>
+                <th class="text-start ps-3">الموظف</th>
+                <th class="text-success">أيام الحضور</th>
+                <th class="text-danger">أيام الغياب</th>
+                <th class="text-warning text-dark">إجمالي دقائق التأخير</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Records.Any())
+            {
+                <tr><td colspan="4" class="py-4">لا توجد سجلات في هذه الفترة.</td></tr>
+            }
+            @foreach (var rec in Model.Records)
+            {
+                <tr>
+                    <td class="text-start ps-3 fw-bold">@rec.EmployeeName</td>
+                    <td class="text-success fw-bold">@rec.PresentDays</td>
+                    <td class="text-danger fw-bold">@rec.AbsentDays</td>
+                    <td class="text-warning text-dark fw-bold">@rec.LateMinutes دقيقة</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

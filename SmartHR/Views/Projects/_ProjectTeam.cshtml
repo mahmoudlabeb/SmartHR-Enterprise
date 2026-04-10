@@ -1,0 +1,52 @@
+@model IEnumerable<SmartHR.Models.Employee>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+<div class="card bg-dark text-white border-0 shadow-sm mb-4 animate__animated animate__fadeInRight">
+    <div class="card-header bg-dark border-secondary d-flex justify-content-between align-items-center py-3">
+        <h6 class="m-0 fw-bold"><i class="fas fa-users text-primary me-2"></i> @Localizer["ProjectTeam"]</h6>
+        <button class="btn btn-sm btn-outline-primary border-0" data-bs-toggle="modal" data-bs-target="#addMemberModal">
+            <i class="fas fa-user-plus"></i>
+        </button>
+    </div>
+    <div class="card-body p-0 max-h-400 overflow-auto custom-scrollbar">
+        <ul class="list-group list-group-flush bg-transparent">
+            @if (Model == null || !Model.Any())
+            {
+                <li class="list-group-item bg-transparent border-secondary text-center text-white-50 py-5">
+                    <i class="fas fa-user-slash fa-3x mb-3 opacity-25"></i>
+                    <p class="mb-0">@Localizer["NoMembersAssignedYet"]</p>
+                </li>
+            }
+            else
+            {
+                @foreach (var member in Model)
+                {
+                    <li class="list-group-item bg-transparent border-secondary d-flex justify-content-between align-items-center p-3 hover-bg-dark">
+                        <div class="d-flex align-items-center">
+                            <div class="position-relative me-3">
+                                <img src="https://ui-avatars.com/api/?name=@(System.Net.WebUtility.UrlEncode(member.FullName))&background=6366f1&color=fff&size=40" class="rounded-circle border border-2 border-primary border-opacity-25" />
+                                <span class="position-absolute bottom-0 end-0 p-1 bg-success border border-dark rounded-circle"></span>
+                            </div>
+                            <div>
+                                <h6 class="mb-0 fw-bold text-white">@member.FullName</h6>
+                                <small class="text-white-50">@(member.Designation?.Title ?? Localizer["TeamMember"].Value)</small>
+                            </div>
+                        </div>
+                        <button class="btn btn-link text-danger p-0" title="@Localizer["RemoveFromProject"]">
+                            <i class="fas fa-times-circle"></i>
+                        </button>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+</div>
+
+<style>
+    .max-h-400 { max-height: 400px; }
+    .hover-bg-dark:hover { background-color: rgba(255, 255, 255, 0.03) !important; }
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+</style>

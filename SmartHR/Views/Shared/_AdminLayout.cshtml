@@ -1,0 +1,88 @@
+@using System.Globalization
+@{
+    var isRTL = CultureInfo.CurrentCulture.Name.StartsWith("ar");
+    var dirAttribute = isRTL ? "rtl" : "ltr";
+}
+<!DOCTYPE html>
+<html lang="@CultureInfo.CurrentCulture.Name" dir="@dirAttribute">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SmartHR</title>
+
+    @if (isRTL)
+    {
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css">
+    }
+    else
+    {
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    }
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="manifest" href="~/manifest.json">
+    <meta name="theme-color" content="#4e73df">
+    <link rel="apple-touch-icon" href="~/img/icon-192.png">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+</head>
+<body>
+    <partial name="_PartialNavbar" />
+
+    <div class="container-fluid">
+        <div class="row">
+            <partial name="_PartialSidebar" />
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4 page-transition">
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb bg-dark p-2 px-3 rounded shadow-sm border border-secondary border-opacity-25">
+                        <li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index" class="text-primary text-decoration-none"><i class="fas fa-home"></i></a></li>
+                        @{
+                            var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+                            var action = ViewContext.RouteData.Values["action"]?.ToString();
+                            if (controller != "Dashboard")
+                            {
+                                <li class="breadcrumb-item text-muted">@controller</li>
+                                @if (action != "Index")
+                                {
+                                    <li class="breadcrumb-item active text-white" aria-current="page">@action</li>
+                                }
+                            }
+                        }
+                    </ol>
+                </nav>
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.12/signalr.min.js"></script>
+    <script src="~/js/signalr-setup.js" asp-append-version="true"></script>
+    <script>
+        $(document).ready(function() {
+            @if (TempData["SuccessMessage"] != null) {
+                <text>toastr.success('@TempData["SuccessMessage"]');</text>
+            }
+            @if (TempData["ErrorMessage"] != null) {
+                <text>toastr.error('@TempData["ErrorMessage"]');</text>
+            }
+            @if (TempData["WarningMessage"] != null) {
+                <text>toastr.warning('@TempData["WarningMessage"]');</text>
+            }
+        });
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').then(registration => {
+                    console.log('SW registered: ', registration);
+                });
+            });
+        }
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Modals", required: false)
+</body>
+</html>

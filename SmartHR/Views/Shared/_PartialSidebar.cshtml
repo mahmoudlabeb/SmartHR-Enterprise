@@ -1,0 +1,178 @@
+@using SmartHR.Models
+@{
+    string? currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    string? currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+
+    string IsActive(string controller, string? action = null)
+    {
+        if (action == null)
+            return controller == currentController ? "active" : "";
+        
+        return (controller == currentController && action == currentAction) ? "active" : "";
+    }
+}
+
+<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block sidebar collapse shadow-lg" style="min-height: calc(100vh - 56px);">
+    <div class="position-sticky pt-3 pb-5">
+
+        <h6 class="sidebar-heading px-3 mt-2 mb-1 text-uppercase fw-bold small">الرئيسية</h6>
+        <ul class="nav flex-column mb-3 px-2">
+            <li class="nav-item">
+                <a class="nav-link fw-bold @IsActive("Dashboard")" asp-controller="Dashboard" asp-action="Index">
+                    <i class="fas fa-tachometer-alt me-2 w-20px text-center"></i> لوحة القيادة
+                </a>
+            </li>
+        </ul>
+
+        @if (User.IsInRole(AppRoles.SuperAdmin) || User.IsInRole(AppRoles.Admin) || User.IsInRole(AppRoles.HR) || User.IsInRole(AppRoles.Manager) || User.IsInRole(AppRoles.Employee) || User.IsInRole(AppRoles.IT))
+        {
+            <h6 class="sidebar-heading px-3 mt-3 mb-1 text-uppercase fw-bold small">سجل الدوام والإجازات</h6>
+            <ul class="nav flex-column mb-3 px-2">
+                <li class="nav-item">
+                    <a class="nav-link @IsActive("Attendance")" asp-controller="Attendance" asp-action="Index">
+                        <i class="fas fa-clock me-2 text-warning w-20px text-center"></i> الحضور والانصراف
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @IsActive("Leaves")" asp-controller="Leaves" asp-action="Index">
+                        <i class="fas fa-calendar-alt me-2 text-primary w-20px text-center"></i> إدارة الإجازات
+                    </a>
+                </li>
+            </ul>
+        }
+
+        @if (User.IsInRole(AppRoles.SuperAdmin) || User.IsInRole(AppRoles.Admin) || User.IsInRole(AppRoles.HR) || User.IsInRole(AppRoles.Manager))
+        {
+            <h6 class="sidebar-heading px-3 mt-3 mb-1 text-uppercase fw-bold small">الموارد البشرية</h6>
+            <ul class="nav flex-column mb-3 px-2">
+                <li class="nav-item">
+                    <a class="nav-link @IsActive("Employees")" asp-controller="Employees" asp-action="Index">
+                        <i class="fas fa-users me-2 text-info w-20px text-center"></i> الموظفين
+                    </a>
+                </li>
+                @if (User.IsInRole(AppRoles.SuperAdmin) || User.IsInRole(AppRoles.Admin) || User.IsInRole(AppRoles.HR))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link @IsActive("Departments")" asp-controller="Departments" asp-action="Index">
+                            <i class="fas fa-sitemap me-2 text-secondary w-20px text-center"></i> الأقسام والهيكل
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @IsActive("Designations")" asp-controller="Designations" asp-action="Index">
+                            <i class="fas fa-id-badge me-2 text-primary w-20px text-center"></i> المسميات الوظيفية
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @IsActive("Recruitment")" asp-controller="Recruitment" asp-action="Index">
+                            <i class="fas fa-briefcase me-2 text-warning w-20px text-center"></i> التوظيف (ATS)
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @IsActive("Training")" asp-controller="Training" asp-action="Index">
+                            <i class="fas fa-chalkboard-teacher me-2 text-success w-20px text-center"></i> التدريب
+                        </a>
+                    </li>
+                }
+            </ul>
+        }
+
+        @if (User.IsInRole(AppRoles.SuperAdmin) || User.IsInRole(AppRoles.Admin) || User.IsInRole(AppRoles.Manager) || User.IsInRole(AppRoles.HR) || User.IsInRole(AppRoles.IT))
+        {
+            <h6 class="sidebar-heading px-3 mt-3 mb-1 text-uppercase fw-bold small">العمليات والمالية</h6>
+            <ul class="nav flex-column mb-3 px-2">
+                @if (User.IsInRole(AppRoles.SuperAdmin) || User.IsInRole(AppRoles.Admin) || User.IsInRole(AppRoles.Manager))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link @IsActive("Projects")" asp-controller="Projects" asp-action="Index">
+                            <i class="fas fa-project-diagram me-2 text-primary w-20px text-center"></i> المشاريع
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @IsActive("Tasks", "TaskAssignment")" asp-controller="Tasks" asp-action="TaskAssignment">
+                            <i class="fas fa-tasks me-2 text-info w-20px text-center"></i> تعيين المهام
+                        </a>
+                    </li>
+                }
+                @if (User.IsInRole(AppRoles.SuperAdmin) || User.IsInRole(AppRoles.Admin) || User.IsInRole(AppRoles.HR))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link @IsActive("Salary")" asp-controller="Salary" asp-action="Index">
+                            <i class="fas fa-money-check-alt me-2 text-success w-20px text-center"></i> مسير الرواتب
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @IsActive("Invoices")" asp-controller="Invoices" asp-action="Index">
+                            <i class="fas fa-file-invoice-dollar me-2 text-primary w-20px text-center"></i> الفواتير
+                        </a>
+                    </li>
+                }
+                <li class="nav-item">
+                    <a class="nav-link @IsActive("Tickets")" asp-controller="Tickets" asp-action="Index">
+                        <i class="fas fa-ticket-alt me-2 text-danger w-20px text-center"></i> الدعم الفني
+                    </a>
+                </li>
+            </ul>
+        }
+
+        <h6 class="sidebar-heading px-3 mt-3 mb-1 text-uppercase fw-bold small">التواصل الداخلي</h6>
+        <ul class="nav flex-column mb-3 px-2">
+            <li class="nav-item">
+                <a class="nav-link @IsActive("Chat", "Group")" asp-controller="Chat" asp-action="Group">
+                    <i class="fas fa-users me-2 text-primary w-20px text-center"></i> القناة العامة (الجميع)
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @IsActive("Chat", "Index")" asp-controller="Chat" asp-action="Index">
+                    <i class="fas fa-comments me-2 text-success w-20px text-center"></i> الرسائل والمحادثات
+                </a>
+            </li>
+        </ul>
+
+        @if (User.IsInRole(AppRoles.SuperAdmin) || User.IsInRole(AppRoles.Admin) || User.IsInRole(AppRoles.Manager))
+        {
+            <h6 class="sidebar-heading px-3 mt-3 mb-1 text-uppercase fw-bold small">التقارير والإحصائيات</h6>
+            <ul class="nav flex-column mb-3 px-2">
+                <li class="nav-item">
+                    <a class="nav-link @IsActive("Reports", "EmployeeAgenda")" asp-controller="Reports" asp-action="EmployeeAgenda">
+                        <i class="fas fa-calendar-check me-2 text-info w-20px text-center"></i> أجندة الإجازات والدوام
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @IsActive("Reports", "PnLReport")" asp-controller="Reports" asp-action="PnLReport">
+                        <i class="fas fa-chart-line me-2 text-success w-20px text-center"></i> تقرير الأرباح والخسائر
+                    </a>
+                </li>
+            </ul>
+        }
+
+        @if (User.IsInRole(AppRoles.SuperAdmin) || User.IsInRole(AppRoles.Admin) || User.IsInRole(AppRoles.IT))
+        {
+            <h6 class="sidebar-heading px-3 mt-3 mb-1 text-uppercase fw-bold small">إدارة النظام</h6>
+            <ul class="nav flex-column mb-4 px-2">
+                <li class="nav-item">
+                    <a class="nav-link @IsActive("Roles")" asp-controller="Roles" asp-action="Index">
+                        <i class="fas fa-user-shield me-2 text-muted w-20px text-center"></i> الصلاحيات والأدوار
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @IsActive("Users", "Pending")" asp-controller="Users" asp-action="Pending">
+                        <i class="fas fa-user-check me-2 text-warning w-20px text-center"></i> طلبات التسجيل
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @IsActive("AuditLogs")" asp-controller="AuditLogs" asp-action="Index">
+                        <i class="fas fa-history me-2 text-danger w-20px text-center"></i> سجل النظام
+                    </a>
+                </li>
+            </ul>
+        }
+
+    </div>
+</nav>
+
+<style>
+    /* Styling now handled globally in site.css */
+    .w-20px {
+        width: 20px;
+    }
+</style>

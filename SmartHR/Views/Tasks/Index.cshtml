@@ -1,0 +1,125 @@
+@model IEnumerable<SmartHR.Models.TaskItem>
+
+@{
+    ViewData["Title"] = "قائمة المهام";
+}
+
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-tasks text-info me-2"></i> قائمة المهام</h1>
+    <div class="btn-group">
+        <a asp-action="Board" class="btn btn-outline-info shadow-sm"><i class="fas fa-columns me-1"></i> لوحة Kanban</a>
+        @if (User.IsInRole(SmartHR.Models.AppRoles.SuperAdmin) || User.IsInRole(SmartHR.Models.AppRoles.Admin) || User.IsInRole(SmartHR.Models.AppRoles.HR) || User.IsInRole(SmartHR.Models.AppRoles.Manager))
+        {
+            <a asp-action="Create" class="btn btn-info text-white shadow-sm"><i class="fas fa-plus me-1"></i> إضافة مهمة</a>
+        }
+    </div>
+</div>
+
+<div class="card shadow-sm border-0 border-top border-info border-4">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4">عنوان المهمة</th>
+                        <th>المشروع</th>
+                        <th>المسؤول</th>
+                        <th class="text-center">الأولوية</th>
+                        <th class="text-center">تاريخ التسليم</th>
+                        <th class="text-center">الحالة</th>
+                        <th class="text-center">خيارات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-4 fw-bold text-dark">@item.Title</td>
+                            <td><span class="badge bg-light text-dark border">@(item.Project?.Name ?? "بدون مشروع")</span></td>
+                            <td>
+                                <img src="https://ui-avatars.com/api/?name=@(item.AssignedEmployee?.FullName ?? "N A")&background=random&size=25" class="rounded-circle me-1" />
+                                @(item.AssignedEmployee?.FullName ?? "غير محدد")
+                            </td>
+                            <td class="text-center">
+                                @if (item.Priority == "High")
+                                {
+                                    <span class="badge bg-danger">عاجلة</span>
+                                }
+                                else if (item.Priority == "Medium")
+                                {
+
+                                    <span class="badge bg-warning text-dark">متوسطة</span>
+                                }
+                                else
+                                {
+
+                                    <span class="badge bg-info">عادية</span>
+                                }
+                            </td>
+                            <td class="text-center @(item.DueDate < DateTime.Today && item.Status != "Completed" ? "text-danger fw-bold" : "")">
+                                @item.DueDate.ToString("dd MMM yyyy")
+                            </td>
+                            <td class="text-center">
+                                @{
+                                    var currentEmpId = ViewBag.CurrentEmployeeId as int?;
+                                    var isAssignee = currentEmpId != null && item.AssignedToId == currentEmpId;
+                                }
+
+                                @if (item.Status == "Pending")
+                                {
+                                    if (isAssignee)
+                                    {
+                                        <form asp-action="UpdateStatus" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@item.Id" />
+                                            <input type="hidden" name="status" value="InProgress" />
+                                            <button type="submit" class="btn btn-sm btn-outline-warning px-3 rounded-pill">
+                                                <i class="fas fa-play me-1 small"></i> Start Working
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">قيد الانتظار</span>
+                                    }
+                                }
+                                else if (item.Status == "InProgress")
+                                {
+                                    if (isAssignee)
+                                    {
+                                        <form asp-action="UpdateStatus" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@item.Id" />
+                                            <input type="hidden" name="status" value="Completed" />
+                                            <button type="submit" class="btn btn-sm btn-success px-3 rounded-pill shadow-sm">
+                                                <i class="fas fa-check me-1 small"></i> Mark as Finished
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-primary">قيد التنفيذ (In Progress)</span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">مكتملة</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group">
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info" title="التفاصيل"><i class="fas fa-eye"></i></a>
+                                    @if (User.IsInRole(SmartHR.Models.AppRoles.SuperAdmin) || User.IsInRole(SmartHR.Models.AppRoles.Admin) || User.IsInRole(SmartHR.Models.AppRoles.HR) || User.IsInRole(SmartHR.Models.AppRoles.Manager))
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary" title="تعديل"><i class="fas fa-edit"></i></a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger" title="حذف"><i class="fas fa-trash"></i></a>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

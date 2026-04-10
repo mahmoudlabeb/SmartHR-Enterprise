@@ -1,0 +1,39 @@
+﻿@model SmartHR.Models.Salary
+
+@{
+    ViewData["Title"] = "تفاصيل الراتب";
+}
+
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-info-circle text-info me-2"></i> تفاصيل مسير الراتب</h1>
+    <div>
+        <a asp-action="Payslip" asp-route-id="@Model.Id" class="btn btn-success shadow-sm me-2"><i class="fas fa-print me-1"></i> طباعة Payslip</a>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary shadow-sm"><i class="fas fa-edit me-1"></i> تعديل</a>
+        <a asp-action="Index" class="btn btn-outline-secondary shadow-sm"><i class="fas fa-arrow-right"></i></a>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0 mb-4 bg-light">
+    <div class="card-body p-4 d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+            <img src="https://ui-avatars.com/api/?name=@Model.Employee?.FullName&background=0D8ABC&color=fff&size=60" class="rounded-circle shadow-sm me-3" />
+            <div>
+                <h5 class="fw-bold mb-1">@(Model.Employee?.FullName ?? "غير محدد")</h5>
+                <span class="text-muted"><i class="far fa-calendar-alt me-1"></i> راتب شهر @Model.Month لسنة @Model.Year</span>
+            </div>
+        </div>
+        <div class="text-end">
+            <span class="d-block text-muted small mb-1">حالة الدفع</span>
+            @if (Model.Status == "Paid")
+            {
+                <span class="badge bg-success fs-6"><i class="fas fa-check-circle me-1"></i> تم تحويل الراتب</span>
+            }
+            else
+            {
+                <span class="badge bg-warning text-dark fs-6"><i class="fas fa-clock me-1"></i> بانتظار التحويل</span>
+            }
+        </div>
+    </div>
+</div>
+
+<partial name="_SalaryBreakdown" model="Model" />

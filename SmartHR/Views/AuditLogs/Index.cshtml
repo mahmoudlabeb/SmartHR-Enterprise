@@ -1,0 +1,61 @@
+@model IEnumerable<SmartHR.Models.AuditLog>
+@{
+    ViewData["Title"] = "Audit Logs";
+}
+
+<div class="container-fluid mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+            <h4 class="mb-0 text-primary"><i class="fas fa-history me-2"></i> Audit Traces</h4>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>DateTime</th>
+                            <th>Action</th>
+                            <th>Table</th>
+                            <th>PK</th>
+                            <th>User ID</th>
+                            <th>Changes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var log in Model)
+                        {
+                            <tr>
+                                <td><small class="text-muted">@log.ChangedAt.ToLocalTime().ToString("MM/dd/yyyy HH:mm:ss")</small></td>
+                                <td>
+                                    @if(log.ActionType == "Added") { <span class="badge bg-success">Insert</span> }
+                                    else if(log.ActionType == "Deleted") { <span class="badge bg-danger">Delete</span> }
+                                    else { <span class="badge bg-warning text-dark">Update</span> }
+                                </td>
+                                <td><span class="fw-bold">@log.TableName</span></td>
+                                <td><code>@log.PrimaryKeyValue</code></td>
+                                <td><small>@log.ChangedByUserId</small></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-info" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@log.Id">View Diff</button>
+                                </td>
+                            </tr>
+                            <tr class="collapse" id="collapse-@log.Id">
+                                <td colspan="6" class="bg-light">
+                                    <div class="row small p-2">
+                                        <div class="col-md-6 border-end">
+                                            <strong>Old Value:</strong>
+                                            <pre class="text-danger mb-0" style="white-space: pre-wrap;">@log.OldValue</pre>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <strong>New Value:</strong>
+                                            <pre class="text-success mb-0" style="white-space: pre-wrap;">@log.NewValue</pre>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

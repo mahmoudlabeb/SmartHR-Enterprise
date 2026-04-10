@@ -1,0 +1,72 @@
+﻿@model SmartHR.Models.TrainingProgram
+
+@{
+    ViewData["Title"] = "إضافة دورة تدريبية";
+}
+
+<div class="pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-plus-circle text-success me-2"></i> إضافة برنامج تدريبي</h1>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0 border-top border-success border-4">
+            <div class="card-body p-4">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-12 mb-3">
+                            <label asp-for="Title" class="form-label fw-bold">عنوان الدورة <span class="text-danger">*</span></label>
+                            <input asp-for="Title" class="form-control form-control-lg" placeholder="مثال: دورة القيادة الفعالة" required />
+                            <span asp-validation-for="Title" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Description" class="form-label fw-bold">أهداف ومحاور الدورة</label>
+                        <textarea asp-for="Description" class="form-control" rows="4" placeholder="اكتب وصفاً مختصراً لما سيتعلمه الموظفون في هذه الدورة..."></textarea>
+                    </div>
+
+                    <div class="row bg-light p-3 rounded mb-4">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label asp-for="Instructor" class="form-label fw-bold">اسم المدرب / الجهة التدريبية <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-chalkboard-teacher"></i></span>
+                                <input asp-for="Instructor" class="form-control" required />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Status" class="form-label fw-bold">حالة الدورة</label>
+                            <select asp-for="Status" class="form-select border-info">
+                                <option value="Upcoming" selected>قادمة (لم تبدأ)</option>
+                                <option value="Ongoing">قيد التنفيذ (مستمرة)</option>
+                                <option value="Completed">مكتملة</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label asp-for="StartDate" class="form-label fw-bold text-success"><i class="far fa-calendar-alt me-1"></i> تاريخ البداية</label>
+                            <input asp-for="StartDate" type="date" class="form-control" value="@DateTime.Today.ToString("yyyy-MM-dd")" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="EndDate" class="form-label fw-bold text-danger"><i class="far fa-calendar-check me-1"></i> تاريخ النهاية</label>
+                            <input asp-for="EndDate" type="date" class="form-control" value="@DateTime.Today.AddDays(7).ToString("yyyy-MM-dd")" required />
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-4 border-top pt-3">
+                        <a asp-action="Index" class="btn btn-light border"><i class="fas fa-times me-1"></i> إلغاء</a>
+                        <button type="submit" class="btn btn-success px-5"><i class="fas fa-save me-2"></i> اعتماد الدورة</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

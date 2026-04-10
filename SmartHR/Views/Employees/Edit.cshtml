@@ -1,0 +1,77 @@
+@model SmartHR.ViewModels.EmployeeEditViewModel
+@{
+    ViewData["Title"] = "تعديل بيانات الموظف";
+}
+
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2 fw-bold mb-0"><i class="fas fa-user-edit me-2" style="color:var(--warning)"></i> تعديل بيانات: @Model.FullName</h1>
+    <a asp-action="Index" class="btn btn-outline-light border"><i class="fas fa-arrow-right me-1"></i> رجوع</a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-lg">
+            <div class="card-body p-4">
+                <form asp-action="Edit" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger small" role="alert"></div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label asp-for="FullName" class="form-label text-muted small fw-bold">الاسم الكامل <span class="text-danger">*</span></label>
+                            <input asp-for="FullName" class="form-control" />
+                            <span asp-validation-for="FullName" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Email" class="form-label text-muted small fw-bold">البريد الإلكتروني</label>
+                            <input asp-for="Email" class="form-control" dir="ltr" />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="PhoneNumber" class="form-label text-muted small fw-bold">رقم الهاتف</label>
+                            <input asp-for="PhoneNumber" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="HireDate" class="form-label text-muted small fw-bold">تاريخ التعيين</label>
+                            <input asp-for="HireDate" type="date" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="DepartmentId" class="form-label text-muted small fw-bold">القسم</label>
+                            <select asp-for="DepartmentId" asp-items="@Model.Departments" class="form-select"></select>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="DesignationId" class="form-label text-muted small fw-bold">المسمى الوظيفي</label>
+                            <select asp-for="DesignationId" asp-items="@Model.Designations" class="form-select"></select>
+                        </div>                        <div class="col-md-12">
+                            <label asp-for="UserId" class="form-label text-muted small fw-bold">ربط بحساب النظام (اختياري)</label>
+                            <select asp-for="UserId" asp-items="@Model.Users" class="form-select">
+                                <option value="">-- لا يوجد ربط بحساب حاليا --</option>
+                            </select>
+                            <span asp-validation-for="UserId" class="text-danger small"></span>
+                        </div>                        <div class="col-md-6">
+                            <label asp-for="BasicSalary" class="form-label text-muted small fw-bold">الراتب الأساسي (ر.س)</label>
+                            <input asp-for="BasicSalary" type="number" step="0.01" class="form-control" />
+                        </div>
+                        <div class="col-md-6 d-flex align-items-end">
+                            <div class="form-check form-switch ps-0">
+                                <input asp-for="IsActive" class="form-check-input ms-0 me-2" type="checkbox" role="switch" />
+                                <label asp-for="IsActive" class="form-check-label text-muted">موظف نشط</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2 justify-content-end mt-4 pt-3 border-top">
+                        <a asp-action="Index" class="btn btn-outline-light border px-4">إلغاء</a>
+                        <button type="submit" class="btn btn-warning px-4">
+                            <i class="fas fa-save me-1"></i> حفظ التعديلات
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

@@ -1,0 +1,70 @@
+﻿@model SmartHR.Models.Client
+
+@{
+    ViewData["Title"] = "إضافة عميل جديد";
+}
+
+<div class="pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-user-plus text-success me-2"></i> إضافة عميل جديد</h1>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0 border-top border-success border-4">
+            <div class="card-body p-4">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <h5 class="fw-bold mb-3 text-primary"><i class="fas fa-info-circle me-2"></i> البيانات الأساسية</h5>
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label asp-for="FullName" class="form-label fw-bold">اسم العميل / الممثل <span class="text-danger">*</span></label>
+                            <input asp-for="FullName" class="form-control" placeholder="الاسم بالكامل" required />
+                            <span asp-validation-for="FullName" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="CompanyName" class="form-label fw-bold">اسم الشركة (اختياري)</label>
+                            <input asp-for="CompanyName" class="form-control" placeholder="اتركه فارغاً إذا كان عميلاً فردياً" />
+                            <span asp-validation-for="CompanyName" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <hr class="my-4" />
+                    <h5 class="fw-bold mb-3 text-primary"><i class="fas fa-address-book me-2"></i> بيانات التواصل</h5>
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label asp-for="Email" class="form-label fw-bold">البريد الإلكتروني <span class="text-danger">*</span></label>
+                            <input asp-for="Email" type="email" class="form-control" placeholder="example@domain.com" required />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="PhoneNumber" class="form-label fw-bold">رقم الهاتف <span class="text-danger">*</span></label>
+                            <input asp-for="PhoneNumber" class="form-control" placeholder="رقم الجوال أو الهاتف الثابت" required />
+                            <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Address" class="form-label fw-bold">العنوان</label>
+                        <textarea asp-for="Address" class="form-control" rows="2" placeholder="العنوان بالتفصيل..."></textarea>
+                        <span asp-validation-for="Address" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-check form-switch fs-5 mb-4 bg-light p-3 rounded">
+                        <input class="form-check-input ms-0 me-3" type="checkbox" asp-for="IsActive" checked>
+                        <label class="form-check-label fw-bold" asp-for="IsActive">حساب العميل نشط</label>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <a asp-action="Index" class="btn btn-light border"><i class="fas fa-times me-1"></i> إلغاء</a>
+                        <button type="submit" class="btn btn-success px-5"><i class="fas fa-save me-2"></i> حفظ بيانات العميل</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

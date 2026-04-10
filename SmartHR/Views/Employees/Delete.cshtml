@@ -1,0 +1,37 @@
+@model SmartHR.Models.Employee
+@{
+    ViewData["Title"] = "حذف الموظف";
+}
+
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom border-danger">
+    <h1 class="h2 fw-bold mb-0 text-danger"><i class="fas fa-exclamation-triangle me-2"></i> تأكيد عملية الحذف</h1>
+    <a asp-action="Index" class="btn btn-outline-light border"><i class="fas fa-arrow-right me-1"></i> تراجع</a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-6 mt-4">
+        <div class="card shadow-lg border-danger" style="border-width: 2px !important;">
+            <div class="card-body p-5 text-center">
+                <div class="mb-4 text-danger">
+                    <i class="fas fa-trash-alt fa-5x opacity-75"></i>
+                </div>
+                
+                <h3 class="fw-bold mb-3">هل أنت متأكد من حذف الموظف؟</h3>
+                <p class="fs-5 text-warning fw-bold">@Model?.FullName</p>
+                <p class="text-muted">انتبه: سيتم أرشفة هذا الحساب وإيقاف كل صلاحيات دخوله للنظام (حذف آمن). لن يتم حذف السجلات المرتبطة بالموظف من قاعدة البيانات.</p>
+                
+                <hr class="my-4 border-secondary opacity-25">
+                
+                <form asp-action="Delete" method="post" class="mt-4">
+                    <input type="hidden" asp-for="Id" />
+                    <div class="d-flex justify-content-center gap-3">
+                        <a asp-action="Index" class="btn btn-outline-light px-4">إلغاء</a>
+                        <button type="submit" class="btn btn-danger px-5 fw-bold">
+                            نعم، احذف الموظف
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,81 @@
+﻿@model SmartHR.Models.TaskItem
+
+@{
+    ViewData["Title"] = "تفاصيل المهمة";
+}
+
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-tasks text-info me-2"></i> تفاصيل المهمة</h1>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary"><i class="fas fa-edit me-1"></i> تحديث</a>
+        <a asp-action="Board" class="btn btn-outline-secondary"><i class="fas fa-columns me-1"></i> لوحة المهام</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0 mb-4 h-100">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 fw-bold text-dark">@Model.Title</h5>
+                @if (Model.Priority == "High")
+                {
+                    <span class="badge bg-danger"><i class="fas fa-fire me-1"></i> عاجلة</span>
+                }
+            </div>
+            <div class="card-body p-4">
+                <h6 class="text-muted fw-bold mb-3">وصف المهمة:</h6>
+                <div class="bg-light p-3 rounded mb-4" style="min-height: 100px;">
+                    @Model.Description
+                </div>
+
+                <hr />
+                <div class="row text-center mt-4">
+                    <div class="col-4 border-end">
+                        <small class="text-muted d-block mb-1">المشروع</small>
+                        <h6 class="fw-bold">@(Model.Project?.Name ?? "غير مرتبط بمشروع")</h6>
+                    </div>
+                    <div class="col-4 border-end">
+                        <small class="text-muted d-block mb-1">تاريخ الإنشاء</small>
+                        <h6 class="fw-bold"><i class="far fa-calendar-plus text-secondary me-1"></i> @Model.CreatedAt.ToString("dd MMM yyyy")</h6>
+                    </div>
+                    <div class="col-4">
+                        <small class="text-muted d-block mb-1">تاريخ التسليم المتوقع</small>
+                        <h6 class="fw-bold text-danger"><i class="far fa-calendar-check me-1"></i> @Model.DueDate.ToString("dd MMM yyyy")</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white py-3">
+                <h6 class="mb-0 fw-bold"><i class="fas fa-user-tie text-info me-2"></i> الموظف المسؤول</h6>
+            </div>
+            <div class="card-body text-center p-4">
+                <img src="https://ui-avatars.com/api/?name=@(Model.AssignedEmployee?.FullName ?? "N A")&background=0D8ABC&color=fff&size=100" class="rounded-circle shadow mb-3" />
+                <h5 class="fw-bold mb-1">@(Model.AssignedEmployee?.FullName ?? "غير محدد")</h5>
+                <p class="text-muted small">@(Model.AssignedEmployee?.Email ?? "---")</p>
+                <a href="mailto:@(Model.AssignedEmployee?.Email)" class="btn btn-sm btn-outline-primary mt-2"><i class="fas fa-envelope me-1"></i> إرسال رسالة</a>
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <h6 class="fw-bold mb-3"><i class="fas fa-thermometer-half text-warning me-2"></i> الحالة الحالية</h6>
+                @if (Model.Status == "Pending")
+                {
+                    <div class="alert alert-secondary mb-0"><i class="fas fa-clock me-2"></i> قيد الانتظار لم تبدأ بعد.</div>
+                }
+                else if (Model.Status == "InProgress")
+                {
+                    <div class="alert alert-primary mb-0"><i class="fas fa-spinner fa-spin me-2"></i> جاري العمل عليها الآن.</div>
+                }
+                else
+                {
+                    <div class="alert alert-success mb-0"><i class="fas fa-check-double me-2"></i> تم إنجاز المهمة بنجاح.</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

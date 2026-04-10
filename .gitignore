@@ -1,0 +1,48 @@
+# [Visual Studio]
+.vs/
+*.user
+*.userosscache
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# [Build Outputs]
+bin/
+obj/
+publish/
+
+# [Core]
+*.db
+*.db-shm
+*.db-wal
+*.log
+
+# [User-specific files]
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# [OS]
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# [Secrets & Config]
+# appsettings.json is committed for structure, but Development/Local should be ignored
+appsettings.Development.json
+secrets.json
+.env
+
+# [Tooling]
+.idea/
+.vscode/
+node_modules/
+.npm/
+
+# [SmartHR Specific]
+wwwroot/uploads/documents/*
+!wwwroot/uploads/documents/.gitkeep

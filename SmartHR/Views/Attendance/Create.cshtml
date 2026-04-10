@@ -1,0 +1,69 @@
+﻿@model SmartHR.Models.Attendance
+
+@{
+    ViewData["Title"] = "تسجيل حضور يدوي";
+}
+
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-user-clock text-primary me-2"></i> تسجيل حضور يدوي</h1>
+    <a asp-action="Index" class="btn btn-outline-secondary"><i class="fas fa-arrow-right me-1"></i> العودة للسجل</a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0 border-top border-primary border-4">
+            <div class="card-body p-4">
+                <div class="alert alert-info small shadow-sm">
+                    <i class="fas fa-info-circle me-1"></i> استخدم هذه الشاشة لإدخال حركات الموظفين الذين تعذر عليهم التبصيم من النظام.
+                </div>
+
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="EmployeeId" class="form-label fw-bold">الموظف <span class="text-danger">*</span></label>
+                        <select asp-for="EmployeeId" class="form-select" asp-items="ViewBag.EmployeeId" required>
+                            <option value="">-- اختر الموظف --</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Date" class="form-label fw-bold">التاريخ <span class="text-danger">*</span></label>
+                        <input asp-for="Date" type="date" class="form-control" value="@DateTime.Today.ToString("yyyy-MM-dd")" required />
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <label asp-for="PunchIn" class="form-label fw-bold text-success">وقت الدخول</label>
+                            <input asp-for="PunchIn" type="time" class="form-control" />
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="PunchOut" class="form-label fw-bold text-danger">وقت الخروج</label>
+                            <input asp-for="PunchOut" type="time" class="form-control" />
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="Status" class="form-label fw-bold">الحالة</label>
+                            <select asp-for="Status" class="form-select">
+                                <option value="Present">حاضر</option>
+                                <option value="Late">متأخر</option>
+                                <option value="Absent">غائب</option>
+                                <option value="HalfDay">نصف يوم</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <hr class="my-4" />
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary px-4"><i class="fas fa-save me-2"></i> حفظ السجل</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

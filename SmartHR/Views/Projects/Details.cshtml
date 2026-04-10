@@ -1,0 +1,205 @@
+@model SmartHR.Services.ProjectDashboardViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+@{
+    ViewData["Title"] = Localizer["ProjectDashboardTool"];
+    var project = Model.Project;
+}
+
+<div class="row g-4 py-4 animate__animated animate__fadeIn">
+    <!-- Header Card -->
+    <div class="col-12">
+        <div class="card shadow-lg border-0 bg-dark text-white overflow-hidden">
+            <div class="card-body p-4 d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <div class="stats-icon bg-info-soft rounded-3 p-3 me-3">
+                        <i class="fas fa-layer-group text-info fa-2x"></i>
+                    </div>
+                    <div>
+                        <h2 class="mb-0 fw-bold">@project.Name</h2>
+                        <p class="text-white-50 mb-0">@Localizer["ProjectTrackingAndManagement"]</p>
+                    </div>
+                </div>
+                <div class="d-flex gap-2">
+                    <a asp-action="Edit" asp-route-id="@project.Id" class="btn btn-outline-light px-4">
+                        <i class="fas fa-edit me-2"></i> @Localizer["UpdateProject"]
+                    </a>
+                    <a asp-action="Index" class="btn btn-primary px-4 shadow-sm">
+                        <i class="fas fa-arrow-left me-2"></i> @Localizer["BackToProjects"]
+                    </a>
+                </div>
+            </div>
+            <!-- Sub-Header: Progress Bar -->
+            <div class="progress rounded-0 bg-dark-light" style="height: 6px;">
+                <div class="progress-bar bg-success" role="progressbar" style="width: @Model.CompletionPercentage.ToString("0")%" 
+                     aria-valuenow="@Model.CompletionPercentage" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Metrics Row -->
+    <div class="col-md-3">
+        <div class="card bg-dark text-white border-0 shadow-sm overflow-hidden">
+            <div class="card-body p-4">
+                <h6 class="text-white-50 uppercase small tracking-wider mb-2">@Localizer["TotalTasks"]</h6>
+                <div class="d-flex justify-content-between align-items-end">
+                    <h2 class="mb-0 fw-bold">@Model.TotalTasks</h2>
+                    <i class="fas fa-list text-primary opacity-50 fa-2x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-dark text-white border-0 shadow-sm overflow-hidden">
+            <div class="card-body p-4">
+                <h6 class="text-white-50 uppercase small tracking-wider mb-2">@Localizer["Completed"]</h6>
+                <div class="d-flex justify-content-between align-items-end">
+                    <h2 class="mb-0 fw-bold text-success">@Model.CompletedTasks</h2>
+                    <i class="fas fa-check-double text-success opacity-50 fa-2x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-dark text-white border-0 shadow-sm overflow-hidden">
+            <div class="card-body p-4">
+                <h6 class="text-white-50 uppercase small tracking-wider mb-2">@Localizer["InProgress"]</h6>
+                <div class="d-flex justify-content-between align-items-end">
+                    <h2 class="mb-0 fw-bold text-warning">@Model.InProgressTasks</h2>
+                    <i class="fas fa-spinner fa-spin text-warning opacity-50 fa-2x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-dark text-white border-0 shadow-sm overflow-hidden">
+            <div class="card-body p-4">
+                <h6 class="text-white-50 uppercase small tracking-wider mb-2">@Localizer["ProjectProgress"]</h6>
+                <div class="d-flex justify-content-between align-items-end">
+                    <h2 class="mb-0 fw-bold text-info">@Model.CompletionPercentage.ToString("0")%</h2>
+                    <i class="fas fa-rocket text-info opacity-50 fa-2x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="col-md-8">
+        <!-- Overview Card -->
+        <div class="card bg-dark text-white border-0 shadow-sm mb-4">
+            <div class="card-header bg-dark border-secondary py-3">
+                <h5 class="mb-0 fw-bold"><i class="fas fa-info-circle me-2 text-primary"></i> @Localizer["Description"]</h5>
+            </div>
+            <div class="card-body p-4">
+                <p class="text-white-50 fs-5" style="line-height: 1.8;">
+                    @(string.IsNullOrEmpty(project.Description) ? Localizer["NoDescriptionAvailable"] : project.Description)
+                </p>
+                
+                <div class="row g-4 mt-2">
+                    <div class="col-6">
+                        <div class="p-3 bg-dark-light rounded-3 border border-secondary border-opacity-25">
+                            <span class="text-white-50 small uppercase d-block mb-1">@Localizer["LaunchDate"]</span>
+                            <h5 class="fw-bold mb-0 text-success"><i class="far fa-calendar-alt me-2"></i> @project.StartDate.ToShortDateString()</h5>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-3 bg-dark-light rounded-3 border border-secondary border-opacity-25">
+                            <span class="text-white-50 small uppercase d-block mb-1">@Localizer["Deadline"]</span>
+                            <h5 class="fw-bold mb-0 text-danger"><i class="far fa-flag me-2"></i> @(project.EndDate.HasValue ? project.EndDate.Value.ToShortDateString() : Localizer["OpenEnded"])</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Tasks List -->
+        <div class="card bg-dark text-white border-0 shadow-sm">
+            <div class="card-header bg-dark border-secondary py-3 d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 fw-bold"><i class="fas fa-tasks me-2 text-primary"></i> @Localizer["RecentTasks"]</h5>
+                <a asp-controller="Tasks" asp-action="Index" asp-route-projectId="@project.Id" class="btn btn-link text-primary text-decoration-none small">@Localizer["ViewAllTasks"]</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover mb-0">
+                        <thead class="bg-dark-light small uppercase tracking-wider">
+                            <tr>
+                                <th class="ps-4">@Localizer["Task"]</th>
+                                <th>@Localizer["Assignee"]</th>
+                                <th>@Localizer["Status"]</th>
+                                <th class="pe-4 text-end">@Localizer["DueDate"]</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var task in Model.RecentTasks)
+                            {
+                                <tr>
+                                    <td class="ps-4">
+                                        <div class="fw-bold text-white">@task.Title</div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://ui-avatars.com/api/?name=@(System.Net.WebUtility.UrlEncode(task.AssignedEmployee?.FullName ?? "UA"))&background=random&size=24" class="rounded-circle me-2" />
+                                            <span class="small">@(task.AssignedEmployee?.FullName ?? Localizer["Unassigned"].Value)</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @{
+                                            var statusColor = task.Status == "Completed" ? "success" : task.Status == "InProgress" ? "primary" : "warning";
+                                        }
+                                        <span class="badge bg-@statusColor bg-opacity-10 text-@statusColor border border-@statusColor rounded-pill px-2 py-1 x-small">
+                                            @Localizer[task.Status]
+                                        </span>
+                                    </td>
+                                    <td class="pe-4 text-end text-white-50 small">@task.DueDate.ToShortDateString()</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Sidebar -->
+    <div class="col-md-4">
+        <partial name="_ProjectTeam" model="Model.SyncedTeamMembers" />
+    </div>
+</div>
+
+@section Modals {
+    <!-- Add Member Modal -->
+    <div class="modal fade" id="addMemberModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-secondary shadow-2xl" style="background-color: #1a1d21;">
+                <div class="modal-header border-secondary p-4">
+                    <h5 class="modal-title fw-bold text-white"><i class="fas fa-user-plus text-primary me-2"></i> @Localizer["AssignMemberToProject"]</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form asp-action="AssignMember" asp-controller="Projects" method="post">
+                    <input type="hidden" name="projectId" value="@project.Id" />
+                    <div class="modal-body p-4">
+                        <div class="mb-3">
+                            <label class="form-label text-white-50 small uppercase fw-bold">@Localizer["SelectEmployee"]</label>
+                            <select name="employeeId" class="form-select bg-dark text-white border-secondary py-2 shadow-none" asp-items="ViewBag.EmployeesList" required>
+                                <option value="">-- @Localizer["ChooseEmployee"] --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-secondary p-4">
+                        <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">@Localizer["Cancel"]</button>
+                        <button type="submit" class="btn btn-primary px-5 fw-bold shadow-lg">@Localizer["AddMember"]</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
+<style>
+    .bg-dark-light { background-color: rgba(255, 255, 255, 0.03); }
+    .bg-info-soft { background-color: rgba(14, 165, 233, 0.15); }
+    .uppercase { text-transform: uppercase; }
+    .tracking-wider { letter-spacing: 0.1em; }
+    .x-small { font-size: 0.75rem; }
+</style>

@@ -1,0 +1,81 @@
+﻿@* ملاحظة برمجية: تأكد أن الـ ViewModel الخاص بك مطابق لهذه الهيكلة أو قم بتعديل الأسماء لتطابق ما بنيته.
+  public class RolePermissionsViewModel {
+      public string RoleId { get; set; }
+      public string RoleName { get; set; }
+      public List<RoleClaimViewModel> Claims { get; set; }
+  }
+*@
+@model SmartHR.ViewModels.RolePermissionsViewModel
+
+@{
+    ViewData["Title"] = "تعيين الصلاحيات";
+}
+
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-user-lock text-success me-2"></i> إدارة صلاحيات: <span class="text-primary">@Model.RoleName</span></h1>
+    <a asp-action="Index" class="btn btn-outline-secondary shadow-sm"><i class="fas fa-arrow-right me-1"></i> العودة للأدوار</a>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <form asp-action="AssignPermissions" method="post">
+            <input type="hidden" asp-for="RoleId" />
+            <input type="hidden" asp-for="RoleName" />
+
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-light py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="m-0 fw-bold text-dark"><i class="fas fa-check-square text-success me-2"></i> وحدات النظام المتاحة (Modules)</h5>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="selectAll">
+                        <label class="form-check-label fw-bold" for="selectAll">تحديد الكل</label>
+                    </div>
+                </div>
+                <div class="card-body p-4 bg-white">
+                    <p class="text-muted small mb-4">قم بوضع علامة (صح) أمام الشاشات والعمليات التي يُسمح لأصحاب هذا الدور (<strong>@Model.RoleName</strong>) بالوصول إليها وإدارتها.</p>
+
+                    <div class="row">
+                        @for (int i = 0; i < Model.Claims.Count; i++)
+                        {
+                            <div class="col-md-4 col-sm-6 mb-3">
+                                <div class="form-check custom-checkbox-card border rounded p-3 hover-bg-light h-100 transition-all">
+                                    <input type="hidden" asp-for="@Model.Claims[i].Type" />
+                                    <input type="hidden" asp-for="@Model.Claims[i].Value" />
+
+                                    <input asp-for="@Model.Claims[i].IsSelected" class="form-check-input permission-checkbox fs-5 ms-0 me-3 mt-1" />
+                                    <label class="form-check-label fw-bold ms-1" asp-for="@Model.Claims[i].IsSelected">
+                                        @Model.Claims[i].Value
+                                    </label>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="card-footer bg-white text-end py-3">
+                    <button type="submit" class="btn btn-success btn-lg px-5 shadow"><i class="fas fa-shield-alt me-2"></i> حفظ الصلاحيات وتطبيقها</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // سكربت بسيط لتشغيل زر "تحديد الكل" للصلاحيات
+        document.getElementById('selectAll').addEventListener('change', function(e) {
+            var checkboxes = document.querySelectorAll('.permission-checkbox');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = e.target.checked;
+            });
+        });
+    </script>
+    <style>
+        .custom-checkbox-card {
+            cursor: pointer;
+        }
+
+            .custom-checkbox-card:hover {
+                border-color: #198754 !important;
+                background-color: #f8fff9 !important;
+            }
+    </style>
+}

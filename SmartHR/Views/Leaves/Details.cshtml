@@ -1,0 +1,129 @@
+@model SmartHR.Models.Leave
+@{
+    ViewData["Title"] = "تفاصيل طلب الإجازة";
+}
+
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2 fw-bold mb-0"><i class="fas fa-file-contract me-2 text-primary"></i> تفاصيل أو مراجعة طلب الإجازة</h1>
+    <a asp-action="Index" class="btn btn-outline-light border"><i class="fas fa-arrow-right me-1"></i> رجوع للطلبات</a>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow-lg mb-4">
+            <div class="card-header bg-transparent pt-4 pb-2 border-bottom-0">
+                <h5 class="fw-bold" style="color:var(--accent-primary)">معلومات الطلب</h5>
+            </div>
+            <div class="card-body p-4">
+                <div class="row border-bottom border-secondary border-opacity-25 pb-3 mb-3">
+                    <div class="col-sm-4 text-muted fw-bold">الموظف صاحب الطلب</div>
+                    <div class="col-sm-8 fw-bold">@(Model?.Employee?.FullName ?? "غير محدد")</div>
+                </div>
+                <div class="row border-bottom border-secondary border-opacity-25 pb-3 mb-3">
+                    <div class="col-sm-4 text-muted fw-bold">القسم</div>
+                    <div class="col-sm-8 text-muted">@(Model?.Employee?.Department?.Name ?? "غير محدد")</div>
+                </div>
+                <div class="row border-bottom border-secondary border-opacity-25 pb-3 mb-3">
+                    <div class="col-sm-4 text-muted fw-bold">نوع الإجازة</div>
+                    <div class="col-sm-8">
+                        <span class="badge" style="background:rgba(99,102,241,0.15); color:var(--accent-primary)">@Model?.LeaveType</span>
+                    </div>
+                </div>
+                <div class="row border-bottom border-secondary border-opacity-25 pb-3 mb-3">
+                    <div class="col-sm-4 text-muted fw-bold">فترة الإجازة</div>
+                    <div class="col-sm-8">
+                        من <span class="fw-bold text-info">@Model?.StartDate.ToString("yyyy/MM/dd")</span> 
+                        إلى <span class="fw-bold text-info">@Model?.EndDate.ToString("yyyy/MM/dd")</span> 
+                        <strong class="mx-2 text-warning">(@((Model?.EndDate - Model?.StartDate)?.Days + 1) يوم)</strong>
+                    </div>
+                </div>
+                <div class="row border-bottom border-secondary border-opacity-25 pb-3 mb-3">
+                    <div class="col-sm-4 text-muted fw-bold">سبب الإجازة</div>
+                    <div class="col-sm-8 text-muted">@(string.IsNullOrEmpty(Model?.Reason) ? "لم يتم كتابة سبب." : Model.Reason)</div>
+                </div>
+                <div class="row pb-2 mb-2">
+                    <div class="col-sm-4 text-muted fw-bold">تاريخ التقديم</div>
+                    <div class="col-sm-8 text-muted">@Model?.CreatedAt.ToString("yyyy/MM/dd hh:mm tt")</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card shadow-lg border-start border-4 border-warning">
+            <div class="card-body p-4 text-center">
+                <h5 class="fw-bold text-muted mb-4">حالة الطلب وقرار الإدارة</h5>
+                
+                @if (Model?.Status == "Pending")
+                {
+                    <i class="fas fa-hourglass-half fa-4x text-warning mb-3 opacity-75"></i>
+                    <h4 class="text-warning fw-bold mb-4">قيد الانتظار والمراجعة</h4>
+                    
+                    @if (User.IsInRole(SmartHR.Models.AppRoles.SuperAdmin) || User.IsInRole(SmartHR.Models.AppRoles.Admin) || User.IsInRole(SmartHR.Models.AppRoles.HR) || User.IsInRole(SmartHR.Models.AppRoles.Manager))
+                    {
+                        <div class="d-flex gap-2 justify-content-center">
+                            <form asp-action="Approve" method="post" class="w-50">
+                                <input type="hidden" name="id" value="@Model.Id" />
+                                <button type="submit" class="btn btn-success w-100 fw-bold"><i class="fas fa-check me-1"></i> موافقة</button>
+                            </form>
+                            <button type="button" class="btn btn-danger w-50 fw-bold" data-bs-toggle="modal" data-bs-target="#rejectModal">
+                                <i class="fas fa-times me-1"></i> رفض
+                            </button>
+                        </div>
+
+                        <!-- Reject Modal -->
+                        <div class="modal fade text-start" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content border-0 shadow-lg">
+                                    <div class="modal-header bg-danger text-white border-0">
+                                        <h5 class="modal-title fw-bold" id="rejectModalLabel"><i class="fas fa-exclamation-circle me-2"></i> تأكيد رفض الإجازة</h5>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form asp-action="Reject" method="post">
+                                        <div class="modal-body p-4 bg-light">
+                                            <input type="hidden" name="id" value="@Model.Id" />
+                                            <div class="mb-3 text-end">
+                                                <label for="reason" class="form-label fw-bold text-dark">يرجى كتابة سبب الرفض <span class="text-danger">*</span></label>
+                                                <textarea id="reason" name="reason" class="form-control" rows="3" placeholder="مثال: ضغط العمل الحالي لا يسمح، نرجو تأجيلها..." required></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer border-0">
+                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">إلغاء</button>
+                                            <button type="submit" class="btn btn-danger fw-bold px-4">تأكيد الرفض</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted small">هذا الطلب مقيد في انتظار قرار المدير المباشر أو الموارد البشرية.</p>
+                    }
+                }
+                else if (Model?.Status == "Approved")
+                {
+                    <i class="fas fa-check-circle fa-4x text-success mb-3 opacity-75"></i>
+                    <h4 class="text-success fw-bold">تمت الموافقة</h4>
+                    @if(ViewBag.ApproverName != null) {
+                        <p class="text-muted small mt-2">بواسطة: @ViewBag.ApproverName</p>
+                    }
+                }
+                else
+                {
+                    <i class="fas fa-times-circle fa-4x text-danger mb-3 opacity-75"></i>
+                    <h4 class="text-danger fw-bold">مرفوض</h4>
+                    @if(ViewBag.ApproverName != null) {
+                        <p class="text-muted small mt-2 mb-1">بواسطة: @ViewBag.ApproverName</p>
+                    }
+                    @if(!string.IsNullOrEmpty(Model?.RejectionReason)) {
+                        <div class="alert alert-danger mt-3 text-start shadow-sm border-start border-danger border-4">
+                            <strong><i class="fas fa-comment-dots me-1"></i> سبب الرفض:</strong>
+                            <p class="mb-0 mt-1 small">@Model.RejectionReason</p>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,63 @@
+﻿@model SmartHR.Models.Contact
+
+@{
+    ViewData["Title"] = "تفاصيل جهة الاتصال";
+}
+
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-id-card-alt text-info me-2"></i> تفاصيل جهة الاتصال</h1>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary shadow-sm"><i class="fas fa-edit me-1"></i> تعديل</a>
+        <a asp-action="Index" class="btn btn-outline-secondary shadow-sm"><i class="fas fa-address-book me-1"></i> الدليل</a>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0 h-100 overflow-hidden">
+            <div class="bg-light py-4 text-center border-bottom">
+                <img src="https://ui-avatars.com/api/?name=@Model.Name&background=0D8ABC&color=fff&size=120" class="rounded-circle shadow border border-white border-4 mb-3" />
+                <h3 class="fw-bold mb-1">@Model.Name</h3>
+                <p class="text-muted mb-2 fs-5">
+                    @(string.IsNullOrEmpty(Model.JobTitle) ? "" : Model.JobTitle + " | ")
+                    <span class="text-dark fw-bold">@(string.IsNullOrEmpty(Model.Company) ? "عمل حر" : Model.Company)</span>
+                </p>
+                <span class="badge bg-secondary px-3 py-2 rounded-pill">@(Model.ContactGroup ?? "جهة اتصال عامة")</span>
+            </div>
+
+            <div class="card-body p-4">
+                <h5 class="fw-bold mb-4 text-primary"><i class="fas fa-link me-2"></i> قنوات التواصل</h5>
+
+                <div class="row mb-3">
+                    <div class="col-sm-4 text-muted fw-bold"><i class="fas fa-phone-alt me-2 text-success"></i> رقم الهاتف الرئيسي:</div>
+                    <div class="col-sm-8 fs-5 fw-bold text-dark">
+                        <a href="tel:@Model.Phone" class="text-decoration-none text-dark">@Model.Phone</a>
+                    </div>
+                </div>
+
+                <hr class="bg-light" />
+
+                <div class="row mb-3">
+                    <div class="col-sm-4 text-muted fw-bold"><i class="fas fa-envelope me-2 text-primary"></i> البريد الإلكتروني:</div>
+                    <div class="col-sm-8 fs-5">
+                        @if (!string.IsNullOrEmpty(Model.Email))
+                        {
+                            <a href="mailto:@Model.Email" class="text-decoration-none">@Model.Email</a>
+                        }
+                        else
+                        {
+                            <span class="text-muted">غير متوفر</span>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer bg-white text-center py-3">
+                <div class="btn-group w-50 shadow-sm">
+                    <a href="tel:@Model.Phone" class="btn btn-outline-success"><i class="fas fa-phone-alt me-1"></i> اتصال</a>
+                    <a href="mailto:@Model.Email" class="btn btn-outline-primary @(string.IsNullOrEmpty(Model.Email) ? "disabled" : "")"><i class="fas fa-envelope me-1"></i> إيميل</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

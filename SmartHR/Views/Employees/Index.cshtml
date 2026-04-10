@@ -1,0 +1,123 @@
+@model IEnumerable<SmartHR.Models.Employee>
+@{
+    ViewData["Title"] = "قائمة الموظفين";
+}
+
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <div>
+        <h1 class="h2 fw-bold mb-0"><i class="fas fa-users me-2" style="color:var(--accent-primary)"></i> قائمة الموظفين</h1>
+        <small class="text-muted">إجمالي: @Model.Count() موظف</small>
+    </div>
+    <div class="btn-group shadow-sm">
+        <a asp-action="ExportToExcel" class="btn btn-outline-success">
+            <i class="fas fa-file-excel me-1"></i> تصدير Excel
+        </a>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus-circle me-1"></i> إضافة موظف
+        </a>
+    </div>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+        <i class="fas fa-check-circle me-2"></i> @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<!-- Search Bar -->
+<form method="get" class="mb-4">
+    <div class="input-group shadow-sm" style="max-width:420px;">
+        <input type="text" name="search" value="@ViewData["Search"]" class="form-control"
+               placeholder="ابحث بالاسم أو البريد الإلكتروني..." />
+        <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
+        @if (!string.IsNullOrEmpty((string?)ViewData["Search"]))
+        {
+            <a asp-action="Index" class="btn btn-outline-light border">مسح</a>
+        }
+    </div>
+</form>
+
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead style="background:rgba(255,255,255,0.05);">
+                    <tr>
+                        <th class="ps-4">الموظف</th>
+                        <th>القسم</th>
+                        <th>المسمى الوظيفي</th>
+                        <th>تاريخ الميلاد</th>
+                        <th class="text-center">الراتب</th>
+                        <th class="text-center">الحالة</th>
+                        <th class="text-center">الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center py-5 text-muted">
+                                <i class="fas fa-user-slash fa-3x mb-3 opacity-50"></i>
+                                <h5>لا يوجد موظفون مسجلون بعد.</h5>
+                                <a asp-action="Create" class="btn btn-primary mt-2">إضافة أول موظف</a>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model)
+                        {
+                            var initials = item.FullName.Length > 0 ? item.FullName[0].ToString() : "?";
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="avatar-circle" style="background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));">
+                                            @initials
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold">@item.FullName</div>
+                                            <small class="text-muted">@item.Email</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge rounded-pill" style="background:rgba(99,102,241,0.15);color:var(--accent-primary);">@(item.Department?.Name ?? "غير محدد")</span></td>
+                                <td class="text-muted">@(item.Designation?.Title ?? "غير محدد")</td>
+                                <td class="text-muted small">@item.HireDate.ToString("dd/MM/yyyy")</td>
+                                <td class="text-center fw-bold" style="color:var(--success)">@item.BasicSalary.ToString("N0") ر.س</td>
+                                <td class="text-center">
+                                    @if (item.IsActive)
+                                    {
+                                        <span class="badge bg-success"><i class="fas fa-circle me-1" style="font-size:0.5rem;"></i>نشط</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">موقوف</span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group shadow-sm">
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-light border" title="تفاصيل"><i class="fas fa-eye"></i></a>
+                                        <a asp-action="Edit"    asp-route-id="@item.Id" class="btn btn-sm btn-outline-light border" title="تعديل"><i class="fas fa-edit"></i></a>
+                                        <a asp-action="Delete"  asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger border" title="حذف"><i class="fas fa-trash-alt"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .avatar-circle {
+        width: 38px; height: 38px;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 700; color: #fff; font-size: 1rem;
+        flex-shrink: 0;
+    }
+</style>

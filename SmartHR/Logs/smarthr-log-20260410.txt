@@ -1,0 +1,217 @@
+2026-04-10 10:19:05.872 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5187/Account/Login - application/x-www-form-urlencoded 246
+2026-04-10 10:19:09.165 +02:00 [INF] Executing endpoint 'SmartHR.Controllers.AccountController.Login (SmartHR)'
+2026-04-10 10:19:10.066 +02:00 [INF] Route matched with {action = "Login", controller = "Account", page = "", area = ""}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(SmartHR.ViewModels.LoginViewModel, System.String) on controller SmartHR.Controllers.AccountController (SmartHR).
+2026-04-10 10:19:14.377 +02:00 [INF] Executed DbCommand (203ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[BasicSalary], [a].[ConcurrencyStamp], [a].[DepartmentId], [a].[Email], [a].[EmailConfirmed], [a].[FullName], [a].[HireDate], [a].[IsActive], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[ReceiveEmailNotifications], [a].[ReceivePushNotifications], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+2026-04-10 10:19:15.431 +02:00 [INF] Executed DbCommand (16ms) [Parameters=[@__normalizedUserName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[BasicSalary], [a].[ConcurrencyStamp], [a].[DepartmentId], [a].[Email], [a].[EmailConfirmed], [a].[FullName], [a].[HireDate], [a].[IsActive], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[ReceiveEmailNotifications], [a].[ReceivePushNotifications], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0
+2026-04-10 10:19:16.115 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[@__user_Id_0='?' (Size = 450)], CommandType='"Text"', CommandTimeout='30']
+SELECT [a].[Id], [a].[ClaimType], [a].[ClaimValue], [a].[UserId]
+FROM [AspNetUserClaims] AS [a]
+WHERE [a].[UserId] = @__user_Id_0
+2026-04-10 10:19:16.238 +02:00 [INF] Executed DbCommand (5ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='"Text"', CommandTimeout='30']
+SELECT [a0].[Name]
+FROM [AspNetUserRoles] AS [a]
+INNER JOIN [AspNetRoles] AS [a0] ON [a].[RoleId] = [a0].[Id]
+WHERE [a].[UserId] = @__userId_0
+2026-04-10 10:19:16.258 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[@__normalizedName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[ConcurrencyStamp], [a].[Name], [a].[NormalizedName]
+FROM [AspNetRoles] AS [a]
+WHERE [a].[NormalizedName] = @__normalizedName_0
+2026-04-10 10:19:16.276 +02:00 [INF] Executed DbCommand (3ms) [Parameters=[@__role_Id_0='?' (Size = 450)], CommandType='"Text"', CommandTimeout='30']
+SELECT [a].[ClaimType], [a].[ClaimValue]
+FROM [AspNetRoleClaims] AS [a]
+WHERE [a].[RoleId] = @__role_Id_0
+2026-04-10 10:19:16.337 +02:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2026-04-10 10:19:16.386 +02:00 [INF] User admin@smarthr.com logged in.
+2026-04-10 10:19:16.390 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[BasicSalary], [a].[ConcurrencyStamp], [a].[DepartmentId], [a].[Email], [a].[EmailConfirmed], [a].[FullName], [a].[HireDate], [a].[IsActive], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[ReceiveEmailNotifications], [a].[ReceivePushNotifications], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+2026-04-10 10:19:16.442 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[@__normalizedRoleName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[ConcurrencyStamp], [a].[Name], [a].[NormalizedName]
+FROM [AspNetRoles] AS [a]
+WHERE [a].[NormalizedName] = @__normalizedRoleName_0
+2026-04-10 10:19:16.473 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[@__p_0='?' (Size = 450), @__p_1='?' (Size = 450)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[UserId], [a].[RoleId]
+FROM [AspNetUserRoles] AS [a]
+WHERE [a].[UserId] = @__p_0 AND [a].[RoleId] = @__p_1
+2026-04-10 10:19:16.493 +02:00 [INF] Executing RedirectResult, redirecting to /Dashboard.
+2026-04-10 10:19:16.497 +02:00 [INF] Executed action SmartHR.Controllers.AccountController.Login (SmartHR) in 6426.0303ms
+2026-04-10 10:19:16.522 +02:00 [INF] Executed endpoint 'SmartHR.Controllers.AccountController.Login (SmartHR)'
+2026-04-10 10:19:16.526 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:5187/Account/Login - 302 0 null 10728.2463ms
+2026-04-10 10:19:16.596 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5187/Dashboard - null null
+2026-04-10 10:19:16.648 +02:00 [INF] Executing endpoint 'SmartHR.Controllers.DashboardController.Index (SmartHR)'
+2026-04-10 10:19:16.655 +02:00 [INF] Route matched with {action = "Index", controller = "Dashboard", page = "", area = ""}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Index() on controller SmartHR.Controllers.DashboardController (SmartHR).
+2026-04-10 10:19:16.812 +02:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Employees] AS [e]
+WHERE [e].[IsDeleted] = CAST(0 AS bit)
+2026-04-10 10:19:16.835 +02:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Departments] AS [d]
+WHERE [d].[IsDeleted] = CAST(0 AS bit)
+2026-04-10 10:19:16.845 +02:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Projects] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[Status] = N'Active'
+2026-04-10 10:19:16.859 +02:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Tickets] AS [t]
+WHERE [t].[Status] = N'Open'
+2026-04-10 10:19:16.873 +02:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Tasks] AS [t]
+WHERE [t].[Status] = N'Pending'
+2026-04-10 10:19:16.885 +02:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Leaves] AS [l]
+WHERE [l].[IsDeleted] = CAST(0 AS bit) AND [l].[Status] = N'Pending'
+2026-04-10 10:19:16.943 +02:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COALESCE(SUM([s].[NetSalary]), 0.0)
+FROM [Salaries] AS [s]
+WHERE [s].[Status] = N'Paid'
+2026-04-10 10:19:16.954 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Leaves] AS [l]
+WHERE [l].[IsDeleted] = CAST(0 AS bit) AND [l].[Status] = N'Approved'
+2026-04-10 10:19:17.013 +02:00 [INF] Executing ViewResult, running view AdminDashboard.
+2026-04-10 10:19:17.267 +02:00 [INF] Executed DbCommand (3ms) [Parameters=[@__currentUserId_0='?' (Size = 450)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [e].[Id], [e].[AnnualLeaveBalance], [e].[BasicSalary], [e].[CreatedAt], [e].[DeletedAt], [e].[DepartmentId], [e].[DesignationId], [e].[Email], [e].[FullName], [e].[HireDate], [e].[IsActive], [e].[IsDeleted], [e].[PhoneNumber], [e].[PhotoPath], [e].[TrainingProgramId], [e].[UpdatedAt], [e].[UserId]
+FROM [Employees] AS [e]
+WHERE [e].[IsDeleted] = CAST(0 AS bit) AND [e].[UserId] = @__currentUserId_0
+2026-04-10 10:19:18.243 +02:00 [INF] Executed ViewResult - view AdminDashboard executed in 1275.1068ms.
+2026-04-10 10:19:18.248 +02:00 [INF] Executed action SmartHR.Controllers.DashboardController.Index (SmartHR) in 1588.4288ms
+2026-04-10 10:19:18.250 +02:00 [INF] Executed endpoint 'SmartHR.Controllers.DashboardController.Index (SmartHR)'
+2026-04-10 10:19:18.252 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5187/Dashboard - 200 null text/html; charset=utf-8 1656.3148ms
+2026-04-10 10:19:18.435 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5187/css/site.css?v=16GJHcHiXAQAo3OWkkz-dozqoFuUajYpo3dlG2MAKAM - null null
+2026-04-10 10:19:18.467 +02:00 [INF] Sending file. Request path: '/css/site.css'. Physical path: 'C:\Users\user\Desktop\HR\SmartHR\SmartHR\wwwroot\css\site.css'
+2026-04-10 10:19:18.470 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5187/css/site.css?v=16GJHcHiXAQAo3OWkkz-dozqoFuUajYpo3dlG2MAKAM - 200 null text/css 35.1528ms
+2026-04-10 10:19:18.746 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5187/js/signalr-setup.js?v=yUj11RtbfkS457BcnfsMHGDcc272xiWmzg4doox1_OU - null null
+2026-04-10 10:19:18.773 +02:00 [INF] Sending file. Request path: '/js/signalr-setup.js'. Physical path: 'C:\Users\user\Desktop\HR\SmartHR\SmartHR\wwwroot\js\signalr-setup.js'
+2026-04-10 10:19:18.776 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5187/js/signalr-setup.js?v=yUj11RtbfkS457BcnfsMHGDcc272xiWmzg4doox1_OU - 200 null text/javascript 30.8738ms
+2026-04-10 10:19:19.310 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5187/manifest.json - null null
+2026-04-10 10:19:19.336 +02:00 [INF] Sending file. Request path: '/manifest.json'. Physical path: 'C:\Users\user\Desktop\HR\SmartHR\SmartHR\wwwroot\manifest.json'
+2026-04-10 10:19:19.339 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5187/manifest.json - 200 null application/json 29.22ms
+2026-04-10 10:19:20.177 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5187/img/icon-192.png - null null
+2026-04-10 10:19:20.197 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5187/img/icon-192.png - 404 0 null 19.176ms
+2026-04-10 10:19:20.215 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5187/img/icon-192.png, Response status code: 404
+2026-04-10 10:19:21.964 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5187/sw.js - null null
+2026-04-10 10:19:21.989 +02:00 [INF] Sending file. Request path: '/sw.js'. Physical path: 'C:\Users\user\Desktop\HR\SmartHR\SmartHR\wwwroot\sw.js'
+2026-04-10 10:19:21.994 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5187/sw.js - 200 null text/javascript 29.9615ms
+2026-04-10 10:19:38.985 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5187/Tasks/TaskAssignment - null null
+2026-04-10 10:19:39.135 +02:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (SuperAdmin|Admin|HR|Manager|IT|Employee)
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (SuperAdmin|Admin|Manager)
+2026-04-10 10:19:39.141 +02:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2026-04-10 10:19:39.144 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5187/Tasks/TaskAssignment - 302 0 null 158.5522ms
+2026-04-10 10:19:39.153 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5187/Account/Login?ReturnUrl=%2FTasks%2FTaskAssignment - null null
+2026-04-10 10:19:39.170 +02:00 [INF] Executing endpoint 'SmartHR.Controllers.AccountController.Login (SmartHR)'
+2026-04-10 10:19:39.172 +02:00 [INF] Route matched with {action = "Login", controller = "Account", page = "", area = ""}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Login(System.String) on controller SmartHR.Controllers.AccountController (SmartHR).
+2026-04-10 10:19:39.187 +02:00 [INF] Executing ViewResult, running view Login.
+2026-04-10 10:19:39.550 +02:00 [INF] Executed ViewResult - view Login executed in 364.2228ms.
+2026-04-10 10:19:39.553 +02:00 [INF] Executed action SmartHR.Controllers.AccountController.Login (SmartHR) in 377.1903ms
+2026-04-10 10:19:39.557 +02:00 [INF] Executed endpoint 'SmartHR.Controllers.AccountController.Login (SmartHR)'
+2026-04-10 10:19:39.560 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5187/Account/Login?ReturnUrl=%2FTasks%2FTaskAssignment - 200 null text/html; charset=utf-8 406.742ms
+2026-04-10 10:19:43.455 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5187/sw.js - null null
+2026-04-10 10:19:43.587 +02:00 [INF] Sending file. Request path: '/sw.js'. Physical path: 'C:\Users\user\Desktop\HR\SmartHR\SmartHR\wwwroot\sw.js'
+2026-04-10 10:19:43.597 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5187/sw.js - 200 null text/javascript 141.7995ms
+2026-04-10 10:19:52.504 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5187/Account/Login?returnurl=%2FTasks%2FTaskAssignment - application/x-www-form-urlencoded 246
+2026-04-10 10:19:52.608 +02:00 [INF] Executing endpoint 'SmartHR.Controllers.AccountController.Login (SmartHR)'
+2026-04-10 10:19:52.611 +02:00 [INF] Route matched with {action = "Login", controller = "Account", page = "", area = ""}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(SmartHR.ViewModels.LoginViewModel, System.String) on controller SmartHR.Controllers.AccountController (SmartHR).
+2026-04-10 10:19:53.022 +02:00 [INF] Executed DbCommand (27ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[BasicSalary], [a].[ConcurrencyStamp], [a].[DepartmentId], [a].[Email], [a].[EmailConfirmed], [a].[FullName], [a].[HireDate], [a].[IsActive], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[ReceiveEmailNotifications], [a].[ReceivePushNotifications], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+2026-04-10 10:19:54.658 +02:00 [INF] Executed DbCommand (15ms) [Parameters=[@__normalizedUserName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[BasicSalary], [a].[ConcurrencyStamp], [a].[DepartmentId], [a].[Email], [a].[EmailConfirmed], [a].[FullName], [a].[HireDate], [a].[IsActive], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[ReceiveEmailNotifications], [a].[ReceivePushNotifications], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0
+2026-04-10 10:19:54.963 +02:00 [INF] Executed DbCommand (20ms) [Parameters=[@__user_Id_0='?' (Size = 450)], CommandType='"Text"', CommandTimeout='30']
+SELECT [a].[Id], [a].[ClaimType], [a].[ClaimValue], [a].[UserId]
+FROM [AspNetUserClaims] AS [a]
+WHERE [a].[UserId] = @__user_Id_0
+2026-04-10 10:19:55.436 +02:00 [INF] Executed DbCommand (44ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='"Text"', CommandTimeout='30']
+SELECT [a0].[Name]
+FROM [AspNetUserRoles] AS [a]
+INNER JOIN [AspNetRoles] AS [a0] ON [a].[RoleId] = [a0].[Id]
+WHERE [a].[UserId] = @__userId_0
+2026-04-10 10:19:55.665 +02:00 [INF] Executed DbCommand (57ms) [Parameters=[@__normalizedName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[ConcurrencyStamp], [a].[Name], [a].[NormalizedName]
+FROM [AspNetRoles] AS [a]
+WHERE [a].[NormalizedName] = @__normalizedName_0
+2026-04-10 10:19:56.705 +02:00 [INF] Executed DbCommand (9ms) [Parameters=[@__role_Id_0='?' (Size = 450)], CommandType='"Text"', CommandTimeout='30']
+SELECT [a].[ClaimType], [a].[ClaimValue]
+FROM [AspNetRoleClaims] AS [a]
+WHERE [a].[RoleId] = @__role_Id_0
+2026-04-10 10:19:56.825 +02:00 [INF] AuthenticationScheme: Identity.Application signed in.
+2026-04-10 10:19:56.842 +02:00 [INF] User admin@smarthr.com logged in.
+2026-04-10 10:19:56.895 +02:00 [INF] Executed DbCommand (30ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[BasicSalary], [a].[ConcurrencyStamp], [a].[DepartmentId], [a].[Email], [a].[EmailConfirmed], [a].[FullName], [a].[HireDate], [a].[IsActive], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[ProfilePicture], [a].[ReceiveEmailNotifications], [a].[ReceivePushNotifications], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+2026-04-10 10:19:57.321 +02:00 [INF] Executed DbCommand (19ms) [Parameters=[@__normalizedRoleName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[ConcurrencyStamp], [a].[Name], [a].[NormalizedName]
+FROM [AspNetRoles] AS [a]
+WHERE [a].[NormalizedName] = @__normalizedRoleName_0
+2026-04-10 10:19:57.848 +02:00 [INF] Executed DbCommand (29ms) [Parameters=[@__p_0='?' (Size = 450), @__p_1='?' (Size = 450)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[UserId], [a].[RoleId]
+FROM [AspNetUserRoles] AS [a]
+WHERE [a].[UserId] = @__p_0 AND [a].[RoleId] = @__p_1
+2026-04-10 10:19:59.309 +02:00 [INF] Executing RedirectResult, redirecting to /Tasks/TaskAssignment.
+2026-04-10 10:19:59.312 +02:00 [INF] Executed action SmartHR.Controllers.AccountController.Login (SmartHR) in 6697.7104ms
+2026-04-10 10:19:59.315 +02:00 [INF] Executed endpoint 'SmartHR.Controllers.AccountController.Login (SmartHR)'
+2026-04-10 10:19:59.323 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:5187/Account/Login?returnurl=%2FTasks%2FTaskAssignment - 302 0 null 6817.5917ms
+2026-04-10 10:19:59.342 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5187/Tasks/TaskAssignment - null null
+2026-04-10 10:19:59.523 +02:00 [INF] Executing endpoint 'SmartHR.Controllers.TasksController.TaskAssignment (SmartHR)'
+2026-04-10 10:19:59.677 +02:00 [INF] Route matched with {action = "TaskAssignment", controller = "Tasks", page = "", area = ""}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] TaskAssignment() on controller SmartHR.Controllers.TasksController (SmartHR).
+2026-04-10 10:20:02.177 +02:00 [INF] Executed DbCommand (833ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [t].[Id], [t].[AssignedToId], [t].[CreatedAt], [t].[Description], [t].[DueDate], [t].[Priority], [t].[ProjectId], [t].[Status], [t].[Title], [t0].[Id], [t0].[CreatedAt], [t0].[DeletedAt], [t0].[Description], [t0].[EndDate], [t0].[IsDeleted], [t0].[Name], [t0].[StartDate], [t0].[Status], [t0].[UpdatedAt], [t1].[Id], [t1].[AnnualLeaveBalance], [t1].[BasicSalary], [t1].[CreatedAt], [t1].[DeletedAt], [t1].[DepartmentId], [t1].[DesignationId], [t1].[Email], [t1].[FullName], [t1].[HireDate], [t1].[IsActive], [t1].[IsDeleted], [t1].[PhoneNumber], [t1].[PhotoPath], [t1].[TrainingProgramId], [t1].[UpdatedAt], [t1].[UserId]
+FROM [Tasks] AS [t]
+LEFT JOIN (
+    SELECT [p].[Id], [p].[CreatedAt], [p].[DeletedAt], [p].[Description], [p].[EndDate], [p].[IsDeleted], [p].[Name], [p].[StartDate], [p].[Status], [p].[UpdatedAt]
+    FROM [Projects] AS [p]
+    WHERE [p].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [t].[ProjectId] = [t0].[Id]
+INNER JOIN (
+    SELECT [e].[Id], [e].[AnnualLeaveBalance], [e].[BasicSalary], [e].[CreatedAt], [e].[DeletedAt], [e].[DepartmentId], [e].[DesignationId], [e].[Email], [e].[FullName], [e].[HireDate], [e].[IsActive], [e].[IsDeleted], [e].[PhoneNumber], [e].[PhotoPath], [e].[TrainingProgramId], [e].[UpdatedAt], [e].[UserId]
+    FROM [Employees] AS [e]
+    WHERE [e].[IsDeleted] = CAST(0 AS bit)
+) AS [t1] ON [t].[AssignedToId] = [t1].[Id]
+ORDER BY [t].[CreatedAt] DESC
+2026-04-10 10:20:02.783 +02:00 [INF] Executing ViewResult, running view TaskAssignment.
+2026-04-10 10:20:03.547 +02:00 [INF] Executed DbCommand (56ms) [Parameters=[@__currentUserId_0='?' (Size = 450)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [e].[Id], [e].[AnnualLeaveBalance], [e].[BasicSalary], [e].[CreatedAt], [e].[DeletedAt], [e].[DepartmentId], [e].[DesignationId], [e].[Email], [e].[FullName], [e].[HireDate], [e].[IsActive], [e].[IsDeleted], [e].[PhoneNumber], [e].[PhotoPath], [e].[TrainingProgramId], [e].[UpdatedAt], [e].[UserId]
+FROM [Employees] AS [e]
+WHERE [e].[IsDeleted] = CAST(0 AS bit) AND [e].[UserId] = @__currentUserId_0
+2026-04-10 10:20:04.428 +02:00 [INF] Executed DbCommand (54ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[CreatedAt], [p].[DeletedAt], [p].[Description], [p].[EndDate], [p].[IsDeleted], [p].[Name], [p].[StartDate], [p].[Status], [p].[UpdatedAt]
+FROM [Projects] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit)
+2026-04-10 10:20:04.645 +02:00 [INF] Executed DbCommand (101ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [e].[Id], [e].[AnnualLeaveBalance], [e].[BasicSalary], [e].[CreatedAt], [e].[DeletedAt], [e].[DepartmentId], [e].[DesignationId], [e].[Email], [e].[FullName], [e].[HireDate], [e].[IsActive], [e].[IsDeleted], [e].[PhoneNumber], [e].[PhotoPath], [e].[TrainingProgramId], [e].[UpdatedAt], [e].[UserId]
+FROM [Employees] AS [e]
+WHERE [e].[IsDeleted] = CAST(0 AS bit)
+2026-04-10 10:20:04.680 +02:00 [INF] Executed ViewResult - view TaskAssignment executed in 1905.5552ms.
+2026-04-10 10:20:04.713 +02:00 [INF] Executed action SmartHR.Controllers.TasksController.TaskAssignment (SmartHR) in 4247.656ms
+2026-04-10 10:20:04.743 +02:00 [INF] Executed endpoint 'SmartHR.Controllers.TasksController.TaskAssignment (SmartHR)'
+2026-04-10 10:20:04.745 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5187/Tasks/TaskAssignment - 200 null text/html; charset=utf-8 5403.7334ms
+2026-04-10 10:20:04.789 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5187/css/site.css?v=16GJHcHiXAQAo3OWkkz-dozqoFuUajYpo3dlG2MAKAM - null null
+2026-04-10 10:20:04.791 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5187/js/signalr-setup.js?v=yUj11RtbfkS457BcnfsMHGDcc272xiWmzg4doox1_OU - null null
+2026-04-10 10:20:04.865 +02:00 [INF] Sending file. Request path: '/css/site.css'. Physical path: 'C:\Users\user\Desktop\HR\SmartHR\SmartHR\wwwroot\css\site.css'
+2026-04-10 10:20:04.878 +02:00 [INF] Sending file. Request path: '/js/signalr-setup.js'. Physical path: 'C:\Users\user\Desktop\HR\SmartHR\SmartHR\wwwroot\js\signalr-setup.js'
+2026-04-10 10:20:04.881 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5187/css/site.css?v=16GJHcHiXAQAo3OWkkz-dozqoFuUajYpo3dlG2MAKAM - 200 null text/css 91.5867ms
+2026-04-10 10:20:04.888 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5187/js/signalr-setup.js?v=yUj11RtbfkS457BcnfsMHGDcc272xiWmzg4doox1_OU - 200 null text/javascript 97.6525ms
+2026-04-10 10:20:04.982 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5187/manifest.json - null null
+2026-04-10 10:20:04.989 +02:00 [INF] Sending file. Request path: '/manifest.json'. Physical path: 'C:\Users\user\Desktop\HR\SmartHR\SmartHR\wwwroot\manifest.json'
+2026-04-10 10:20:04.998 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5187/manifest.json - 200 null application/json 16.2489ms
+2026-04-10 10:20:05.271 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5187/img/icon-192.png - null null
+2026-04-10 10:20:05.298 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5187/img/icon-192.png - 404 0 null 26.9717ms
+2026-04-10 10:20:05.311 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5187/img/icon-192.png, Response status code: 404
+2026-04-10 10:20:07.193 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5187/sw.js - null null
+2026-04-10 10:20:08.365 +02:00 [INF] Sending file. Request path: '/sw.js'. Physical path: 'C:\Users\user\Desktop\HR\SmartHR\SmartHR\wwwroot\sw.js'
+2026-04-10 10:20:09.040 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5187/sw.js - 200 null text/javascript 1846.6754ms

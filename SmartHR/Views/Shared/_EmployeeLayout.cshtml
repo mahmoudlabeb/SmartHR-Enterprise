@@ -1,0 +1,148 @@
+@using System.Globalization
+@{
+    var isRTL = CultureInfo.CurrentCulture.Name.StartsWith("ar");
+    var dirAttribute = isRTL ? "rtl" : "ltr";
+}
+<!DOCTYPE html>
+<html lang="@CultureInfo.CurrentCulture.Name" dir="@dirAttribute">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SmartHR (Employee)</title>
+
+    @if (isRTL)
+    {
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css">
+    }
+    else
+    {
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    }
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="manifest" href="~/manifest.json">
+    <meta name="theme-color" content="#10b981">
+    <link rel="apple-touch-icon" href="~/img/icon-192.png">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+</head>
+<body>
+    
+    <!-- Employee Dedicated Top Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm border-bottom">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-success" asp-area="" asp-controller="Dashboard" asp-action="Index">
+                <i class="fas fa-leaf me-2"></i> بوابة الموظفين
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#employeeMenu" aria-controls="employeeMenu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="employeeMenu">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item border-start border-secondary border-opacity-25 px-2 ms-2">
+                        <a class="nav-link text-dark" asp-controller="Dashboard" asp-action="Index"><i class="fas fa-home me-1 text-muted"></i> الرئيسية</a>
+                    </li>
+                    <li class="nav-item border-start border-secondary border-opacity-25 px-2">
+                        <a class="nav-link text-dark" asp-controller="Leaves" asp-action="Index"><i class="fas fa-calendar-check me-1 text-muted"></i> إجازاتي</a>
+                    </li>
+                    <li class="nav-item border-start border-secondary border-opacity-25 px-2">
+                        <a class="nav-link text-dark" asp-controller="Tasks" asp-action="Index"><i class="fas fa-tasks me-1 text-muted"></i> مهامي</a>
+                    </li>
+                    <li class="nav-item border-start border-secondary border-opacity-25 px-2">
+                        <a class="nav-link text-dark" asp-controller="Tickets" asp-action="Index"><i class="fas fa-ticket-alt me-1 text-muted"></i> الدعم الفني</a>
+                    </li>                    <li class="nav-item border-start border-secondary border-opacity-25 px-2">
+                        <a class="nav-link text-dark" asp-controller="Chat" asp-action="Index"><i class="fas fa-comments me-1 text-success"></i> ط§ظ„ط±ط³ط§ط¦ظ„</a>
+                    </li>                </ul>
+
+                <!-- Notifications Dropdown -->
+                <div class="nav-item dropdown mx-2 border-start border-secondary border-opacity-25 ps-3 pe-2 pt-1 position-relative">
+                    <a class="nav-link text-dark d-flex align-items-center" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-bell fs-5 text-muted"></i>
+                        <span id="notificationCount" class="badge rounded-pill bg-danger position-absolute top-0 start-50 translate-middle-y" style="display: none; font-size: 0.65rem;">
+                            0
+                        </span>
+                    </a>
+                    <ul id="notificationItems" class="dropdown-menu dropdown-menu-start shadow border-0" aria-labelledby="notificationsDropdown" style="width: 300px; max-height: 400px; overflow-y: auto;">
+                        <li class="p-3 text-center text-muted small"><i class="fas fa-bell-slash fa-2x mb-2 opacity-50"></i><br>جاري تحميل الإشعارات...</li>
+                    </ul>
+                </div>
+
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-dark d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        @{
+                            string userName = User.Identity?.Name ?? "Employee";
+                            string avatarName = Uri.EscapeDataString(userName);
+                        }
+                        <img src="https://ui-avatars.com/api/?name=@avatarName&background=10b981&color=fff&size=30&bold=true" class="rounded-circle me-2 shadow-sm" alt="User">
+                        <span class="fw-bold">@userName</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow border-0" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-user-circle text-muted me-2"></i> الملف الشخصي</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form class="form-inline" asp-controller="Account" asp-action="Logout" method="post">
+                                <button type="submit" class="dropdown-item text-danger fw-bold"><i class="fas fa-sign-out-alt me-2"></i> تسجيل الخروج</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content for Employee (No Sidebar) -->
+    <div class="container py-5 page-transition">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible shadow-sm fade show mb-4" role="alert">
+                <i class="fas fa-check-circle me-2"></i> @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible shadow-sm fade show mb-4" role="alert">
+                <i class="fas fa-exclamation-circle me-2"></i> @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+        @if (TempData["WarningMessage"] != null)
+        {
+            <div class="alert alert-warning alert-dismissible shadow-sm fade show mb-4" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i> @TempData["WarningMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+        <main>
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- Minimal Footer -->
+    <footer class="container text-center py-4 mt-auto">
+        <hr class="border-secondary opacity-25">
+        <small class="text-muted">نظام SmartHR - بوابة الخدمة الذاتية للموظفين &copy; 2026</small>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.12/signalr.min.js"></script>
+    <script src="~/js/signalr-setup.js" asp-append-version="true"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').then(registration => {
+                    console.log('SW registered: ', registration);
+                }).catch(registrationError => {
+                    console.log('SW registration failed: ', registrationError);
+                });
+            });
+        }
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Modals", required: false)
+</body>
+</html>

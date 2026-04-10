@@ -1,0 +1,53 @@
+﻿@model SmartHR.ViewModels.LocalizationViewModel
+
+@{
+    ViewData["Title"] = "اللغة والمنطقة الزمنية";
+}
+
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-globe-africa text-success me-2"></i> الإعدادات الإقليمية (Localization)</h1>
+    <a asp-action="Index" class="btn btn-outline-secondary shadow-sm"><i class="fas fa-arrow-right me-1"></i> العودة للإعدادات</a>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 border-top border-success border-4">
+            <div class="card-body p-4">
+                <form asp-action="Localization" method="post">
+
+                    <div class="mb-4">
+                        <label asp-for="Language" class="form-label fw-bold">لغة واجهة النظام الافتراضية</label>
+                        <select asp-for="Language" class="form-select">
+                            <option value="ar">العربية (Arabic) - RTL</option>
+                            <option value="en">الإنجليزية (English) - LTR</option>
+                        </select>
+                        <div class="form-text small text-muted">هذا الإعداد سيطبق على جميع المستخدمين الجدد افتراضياً.</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="TimeZone" class="form-label fw-bold">المنطقة الزمنية (Time Zone)</label>
+                        <select asp-for="TimeZone" class="form-select" dir="ltr">
+                            <option value="Asia/Riyadh">(UTC+03:00) Riyadh, Asia</option>
+                            <option value="Asia/Dubai">(UTC+04:00) Dubai, Asia</option>
+                            <option value="Africa/Cairo">(UTC+02:00) Cairo, Africa</option>
+                            <option value="UTC">Coordinated Universal Time (UTC)</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="DateFormat" class="form-label fw-bold">صيغة عرض التاريخ (Date Format)</label>
+                        <select asp-for="DateFormat" class="form-select" dir="ltr">
+                            <option value="dd/MM/yyyy">dd/MM/yyyy (31/12/2026)</option>
+                            <option value="MM/dd/yyyy">MM/dd/yyyy (12/31/2026)</option>
+                            <option value="yyyy-MM-dd">yyyy-MM-dd (2026-12-31)</option>
+                        </select>
+                    </div>
+
+                    <div class="text-end border-top pt-3">
+                        <button type="submit" class="btn btn-success px-5"><i class="fas fa-check me-2"></i> تطبيق الإعدادات</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

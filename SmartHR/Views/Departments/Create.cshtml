@@ -1,0 +1,48 @@
+﻿@model SmartHR.Models.Department
+
+@{
+    ViewData["Title"] = "إضافة قسم جديد";
+}
+
+<div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-plus-square text-success me-2"></i> إضافة قسم جديد</h1>
+    <a asp-action="Index" class="btn btn-outline-secondary"><i class="fas fa-arrow-right me-1"></i> العودة للقائمة</a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0 border-top border-success border-4">
+            <div class="card-body p-4">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label fw-bold">اسم القسم <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-tag"></i></span>
+                            <input asp-for="Name" class="form-control" placeholder="مثال: قسم تقنية المعلومات (IT)" required />
+                        </div>
+                        <span asp-validation-for="Name" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Description" class="form-label fw-bold">وصف القسم</label>
+                        <textarea asp-for="Description" class="form-control" rows="4" placeholder="اكتب نبذة مختصرة عن مهام هذا القسم..."></textarea>
+                        <span asp-validation-for="Description" class="text-danger small"></span>
+                    </div>
+
+                    <hr class="my-4" />
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-success px-4"><i class="fas fa-save me-2"></i> حفظ القسم</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

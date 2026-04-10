@@ -1,0 +1,38 @@
+﻿@model Microsoft.AspNetCore.Identity.IdentityRole
+
+@{
+    ViewData["Title"] = "تعديل الدور";
+}
+
+<div class="pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2"><i class="fas fa-edit text-primary me-2"></i> تحديث اسم الدور</h1>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 border-top border-primary border-4">
+            <div class="card-body p-4">
+                <div class="alert alert-warning small border-0 shadow-sm mb-4">
+                    <i class="fas fa-exclamation-triangle me-2"></i> <strong>تنبيه:</strong> تغيير اسم الدور قد يؤدي إلى فقدان بعض المستخدمين لصلاحياتهم إذا كانت الكود يعتمد على الاسم الصريح للدور في الـ <code>[Authorize(Roles="Name")]</code>.
+                </div>
+
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="ConcurrencyStamp" />
+
+                    <div class="mb-4">
+                        <label asp-for="Name" class="form-label fw-bold">اسم الدور</label>
+                        <input asp-for="Name" class="form-control form-control-lg" required />
+                        <span asp-validation-for="Name" class="text-danger small"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center border-top pt-4">
+                        <a asp-action="Index" class="btn btn-light border px-4">تراجع</a>
+                        <button type="submit" class="btn btn-primary px-5"><i class="fas fa-save me-2"></i> حفظ التحديث</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

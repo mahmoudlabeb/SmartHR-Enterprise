@@ -1,0 +1,29 @@
+﻿@model SmartHR.Models.Department
+
+@{
+    ViewData["Title"] = "حذف القسم";
+}
+
+<div class="pt-3 pb-2 mb-4 border-bottom">
+    <h1 class="h2 text-danger"><i class="fas fa-exclamation-triangle me-2"></i> تأكيد الحذف</h1>
+</div>
+
+<div class="alert alert-danger shadow-sm p-4" role="alert">
+    <h4 class="alert-heading fw-bold mb-3">هل أنت متأكد من رغبتك في حذف هذا القسم؟</h4>
+    <p>بمجرد حذف قسم <strong>(@Model.Name)</strong>، لن تتمكن من استرجاعه. يرجى التأكد من عدم وجود موظفين أو مشاريع مرتبطة بهذا القسم قبل إتمام عملية الحذف لتجنب أي أخطاء في النظام.</p>
+    <hr>
+
+    <div class="d-flex align-items-center mt-3 bg-white p-3 rounded text-dark">
+        <i class="fas fa-building fa-2x text-danger opacity-75 me-3"></i>
+        <div>
+            <h5 class="mb-0 fw-bold">@Model.Name</h5>
+            <small class="text-muted">تم الإنشاء في: @Model.CreatedAt.ToShortDateString()</small>
+        </div>
+    </div>
+</div>
+
+<form asp-action="Delete" class="mt-4">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger px-4 me-2"><i class="fas fa-trash-alt me-2"></i> نعم، تأكيد الحذف</button>
+    <a asp-action="Index" class="btn btn-light border">إلغاء الأمر والعودة</a>
+</form>

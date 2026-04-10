@@ -1,0 +1,143 @@
+@using SmartHR.Services
+@model PnLReportViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+@{
+    ViewData["Title"] = "Financial Performance Profile";
+}
+
+<div class="row align-items-center pt-3 pb-2 mb-4">
+    <div class="col-md-6">
+        <h1 class="h2 fw-bold text-white"><i class="fas fa-file-invoice-dollar text-primary me-3"></i> Profit & Loss Statement</h1>
+        <p class="text-muted">Quarter @Model.Quarter, @Model.Year | Reported Financials</p>
+    </div>
+    <div class="col-md-6 text-md-end mt-3 mt-md-0">
+        <button onclick="window.print()" class="btn btn-outline-light shadow-sm px-4">
+            <i class="fas fa-print me-2"></i> @Localizer["PrintReport"]
+        </button>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    <!-- Revenue -->
+    <div class="col-md-4">
+        <div class="card bg-dark border-0 shadow-lg h-100 hover-elevate" style="border-left: 4px solid #10b981 !important;">
+            <div class="card-body p-4">
+                <div class="small fw-bold text-success text-uppercase opacity-75 mb-2" style="letter-spacing: 1px;">Project Revenue</div>
+                <div class="h2 fw-bold text-white mb-0">@Model.TotalProjectRevenue.ToString("C")</div>
+                <div class="mt-3 small text-muted"><i class="fas fa-arrow-up text-success me-1"></i> Gross billable income</div>
+            </div>
+        </div>
+    </div>
+    <!-- Salaries -->
+    <div class="col-md-4">
+        <div class="card bg-dark border-0 shadow-lg h-100 hover-elevate" style="border-left: 4px solid #f43f5e !important;">
+            <div class="card-body p-4">
+                <div class="small fw-bold text-danger text-uppercase opacity-75 mb-2" style="letter-spacing: 1px;">Workforce Costs</div>
+                <div class="h2 fw-bold text-white mb-0">@Model.TotalSalaries.ToString("C")</div>
+                <div class="mt-3 small text-muted"><i class="fas fa-users me-1"></i> Net salaries disbursed</div>
+            </div>
+        </div>
+    </div>
+    <!-- Expenses -->
+    <div class="col-md-4">
+        <div class="card bg-dark border-0 shadow-lg h-100 hover-elevate" style="border-left: 4px solid #f59e0b !important;">
+            <div class="card-body p-4">
+                <div class="small fw-bold text-warning text-uppercase opacity-75 mb-2" style="letter-spacing: 1px;">Operational Spend</div>
+                <div class="h2 fw-bold text-white mb-0">@Model.TotalExpenses.ToString("C")</div>
+                <div class="mt-3 small text-muted"><i class="fas fa-receipt me-1"></i> Approved business expenses</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card bg-dark border-0 shadow-lg h-100">
+            <div class="card-header bg-transparent border-bottom border-light border-opacity-10 pt-4 pb-3">
+                <h6 class="m-0 fw-bold text-white"><i class="fas fa-balance-scale text-primary me-2"></i> P&L Breakdown</h6>
+            </div>
+            <div class="card-body p-5 text-center">
+                <div class="mb-4">
+                    <h1 class="display-3 fw-bold @(Model.NetProfit >= 0 ? "text-success" : "text-danger")">
+                        @Model.NetProfit.ToString("C")
+                    </h1>
+                    <p class="text-muted text-uppercase fw-bold" style="letter-spacing: 2px;">Net Platform Performance</p>
+                </div>
+                
+                <div class="progress bg-secondary bg-opacity-10 rounded-pill mb-4" style="height: 12px;">
+                    @{
+                        var totalExpenses = Model.TotalSalaries + Model.TotalExpenses;
+                        var expenseRatio = Model.TotalProjectRevenue > 0 ? (totalExpenses / Model.TotalProjectRevenue) * 100 : 0;
+                        var profitRatio = 100 - expenseRatio;
+                    }
+                    <div class="progress-bar bg-success" role="progressbar" style="width: @profitRatio%"></div>
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: @expenseRatio%"></div>
+                </div>
+                
+                <div class="d-flex justify-content-center gap-4">
+                    <div class="text-start">
+                        <span class="badge bg-success rounded-circle p-1 me-1"><i class="fas fa-circle opacity-0"></i></span>
+                        <span class="small text-muted">Retained Profit: @profitRatio.ToString("F1")%</span>
+                    </div>
+                    <div class="text-start">
+                        <span class="badge bg-danger rounded-circle p-1 me-1"><i class="fas fa-circle opacity-0"></i></span>
+                        <span class="small text-muted">Total Overhead: @expenseRatio.ToString("F1")%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card bg-dark border-0 shadow-lg h-100">
+            <div class="card-header bg-transparent border-bottom border-light border-opacity-10 pt-4 pb-3">
+                <h6 class="m-0 fw-bold text-white"><i class="fas fa-chart-pie text-info me-2"></i> Expense Distribution</h6>
+            </div>
+            <div class="card-body p-4 d-flex align-items-center justify-content-center">
+                <canvas id="expenseDistributionChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-dark { background-color: #1a1d21 !important; }
+    .hover-elevate { transition: transform 0.2s, box-shadow 0.2s; }
+    .hover-elevate:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important; }
+    @@media print {
+        .btn, .main-navbar, .sidebar { display: none !important; }
+        .bg-dark { background-color: #fff !important; color: #000 !important; }
+        .text-white { color: #000 !important; }
+    }
+</style>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var ctx = document.getElementById('expenseDistributionChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Salaries', 'Expenses', 'Net Margin'],
+                    datasets: [{
+                        data: [@Model.TotalSalaries, @Model.TotalExpenses, @(Model.NetProfit > 0 ? Model.NetProfit : 0)],
+                        backgroundColor: ['#f43f5e', '#f59e0b', '#10b981'],
+                        borderWidth: 0,
+                        hoverOffset: 15
+                    }]
+                },
+                options: {
+                    cutout: '80%',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: '#94a3b8', padding: 20 } }
+                    }
+                }
+            });
+        });
+    </script>
+}
